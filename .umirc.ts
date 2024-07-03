@@ -36,4 +36,13 @@ export default defineConfig({
             pathRewrite: {},
         },
     },
+    chainWebpack(memo, args) {
+        memo.output.path(
+            path.resolve(
+                __dirname,
+                '../',
+                './xindOnline/src/main/resources/static',
+            ),
+        );
+    },
 });

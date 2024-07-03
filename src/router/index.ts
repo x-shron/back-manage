@@ -52,6 +52,12 @@ const routes = [
         exact: true,
         title: '线下服务',
     },
+    {
+        path: '/user-list',
+        component: '@/pages/user-manage',
+        exact: true,
+        title: '用户列表',
+    },
 ];
 
 export default routes;

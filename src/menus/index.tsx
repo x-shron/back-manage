@@ -23,6 +23,17 @@ const menuList = [
         ],
     },
     {
+        title: '用户管理',
+        icon: <TrademarkOutlined />,
+        children: [
+            {
+                title: '用户列表',
+                path: '/user-list',
+                children: [],
+            },
+        ],
+    },
+    {
         title: '相亲管理',
         icon: <PieChartOutlined />,
         children: [
@@ -35,7 +46,7 @@ const menuList = [
     },
     {
         title: '系统管理',
-        icon: <PieChartOutlined />,
+        icon: <TrademarkOutlined />,
         children: [
             {
                 title: '隐私协议',

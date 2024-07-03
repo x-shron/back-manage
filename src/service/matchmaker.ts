@@ -30,3 +30,14 @@ export const getMarriageList = async (params?: any) => {
     });
     return res.data;
 };
+
+// 用户角色
+export const getUserRoleMap = async (params?: any) => {
+    const res = await request({
+        method: 'get',
+        url: '/api/config/roleMap',
+        params,
+        showFailedMessage: false,
+    });
+    return res.data;
+};
