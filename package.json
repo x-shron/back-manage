@@ -1,0 +1,58 @@
+{
+  "name": "backstage-web",
+  "version": "1.0.0",
+  "private": true,
+  "scope": "base",
+  "scripts": {
+    "start": "umi dev",
+    "build": "umi build",
+    "generate-deploy-scripts": "generate-deploy-scripts",
+    "postinstall": "umi generate tmp",
+    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
+    "test": "umi-test",
+    "test:coverage": "umi-test --coverage"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,less,md,json}": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "prettier --parser=typescript --write"
+    ]
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.6.2",
+    "@umijs/runtime": "^3.5.20",
+    "ahooks": "^3.8.0",
+    "antd": "^5.18.3",
+    "array-move": "^3.0.1",
+    "axios": "^0.21.1",
+    "babel-plugin-import": "^1.13.3",
+    "classnames": "^2.5.1",
+    "echarts": "^5.2.2",
+    "i18next": "^20.3.0",
+    "js-md5": "^0.7.3",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "path-to-regexp": "^6.2.0",
+    "react-color": "^2.19.3",
+    "react-sortable-hoc": "^2.0.0",
+    "react-transition-group": "^4.4.5",
+    "regenerator-runtime": "^0.13.9",
+    "umi": "^3.4.8"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@umijs/test": "^3.4.8",
+    "lint-staged": "^10.0.7",
+    "prettier": "^2.2.0",
+    "react": "17.x",
+    "react-dom": "17.x",
+    "typescript": "^4.1.2",
+    "yorkie": "^2.0.0"
+  }
+}

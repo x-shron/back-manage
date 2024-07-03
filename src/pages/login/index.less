@@ -1,0 +1,232 @@
+@keyframes show-item {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes hide-item {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.text-fade-in {
+    animation: show-item 0.5s ease-in;
+    display: inline-block;
+}
+.login {
+    position: relative;
+    background-repeat: no-repeat;
+    // background-position: top left;
+    background-size: 100% 100%;
+    height: 100%;
+    width: 100%;
+    // background-image: url(~@/assets/img_bg.png);
+    background-color: #a7beeb;
+    overflow: auto;
+    &-logo {
+        width: 240px;
+        height: 60px;
+        margin: 64px 0 0 72px;
+    }
+    &-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        &-title {
+            width: 452px;
+            height: 101px;
+        }
+        &-form {
+            position: relative;
+            box-sizing: border-box;
+            width: 440px;
+            height: 430px;
+            padding: 45px 40px;
+            background: rgba(98, 115, 152, 0.9);
+            box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.2);
+            .top-banner {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 40px;
+                &-left {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 40px;
+                    height: 40px;
+                }
+                &-right {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+            .login-form-title {
+                width: 100%;
+                margin-bottom: 40px;
+                color: #ffffff;
+                font-weight: 700;
+                font-size: 24px;
+                font-family: SourceHanSansCN-Bold, sans-serif;
+                letter-spacing: 0;
+                text-align: center;
+                text-align: center;
+            }
+            .poppy-input:hover {
+                background-color: transparent !important;
+            }
+            .poppy-input-affix-wrapper,
+            .poppy-select-selector {
+                color: rgba(255, 255, 255);
+                font-weight: 400;
+                font-size: 16px;
+                font-family: SourceHanSansCN-Regular, sans-serif;
+                letter-spacing: 0;
+                // background: rgba(255, 255, 255, 0.15) !important;
+                background: #525660 !important;
+
+                border: none !important;
+                border-radius: 4px !important;
+                outline: none;
+                box-shadow: none !important;
+                &:focus {
+                    box-shadow: none;
+                }
+                .poppy-input {
+                    color: rgba(255, 255, 255);
+                    font-weight: 400;
+                    font-size: 16px;
+                    font-family: SourceHanSansCN-Regular, sans-serif;
+                    letter-spacing: 0;
+                    background: transparent;
+                    &::placeholder {
+                        color: rgba(255, 255, 255, 0.45);
+                    }
+                }
+            }
+            .poppy-select-selector {
+                height: 40px !important;
+                padding: 4px 0 0 60px !important;
+            }
+            .poppy-input-affix-wrapper-focused,
+            .poppy-select {
+                outline: none;
+                box-shadow: none;
+            }
+
+            .poppy-input:-webkit-autofill,
+            .poppy-input[type='text']:focus
+                .poppy-input[type='password']:focus {
+                -webkit-box-shadow: 0 0 0 1000px transparent inset; // 背景设为白色
+                transition: background-color 5000s ease-in-out 0s;
+                -webkit-text-fill-color: rgba(255, 255, 255, 0.45); // 字体颜色
+            }
+            .poppy-select {
+                position: relative;
+                .poppy-select-arrow {
+                    position: absolute;
+                    top: 19px;
+                    left: 13px;
+                }
+            }
+            .input-prefix {
+                margin-right: 5px;
+                padding-right: 15px;
+                font-size: 16px;
+                border-right: 1px solid rgba(99, 99, 99, 0.45);
+            }
+            .code-form-item {
+                .poppy-form-item-control-input-content {
+                    display: flex;
+                    align-items: center;
+                    .code-img {
+                        width: 107px;
+                        height: 40px;
+                        border-radius: 2px;
+                    }
+                }
+            }
+
+            .error-info {
+                height: 16px;
+                color: red;
+                line-height: 16px;
+                text-align: center;
+            }
+
+            .login-btn {
+                width: 240px;
+                height: 48px;
+                margin: 14px 0 0 60px;
+                color: #ffffff;
+                font-weight: 700;
+                font-size: 16px;
+                font-family: SourceHanSansCN-Bold, sans-serif;
+                letter-spacing: 0;
+                text-align: center;
+                background: #597ef7;
+                border: none;
+                border-radius: 24px;
+            }
+
+            .bottom-banner {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 40px;
+                &-left {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 40px;
+                    height: 40px;
+                }
+                &-right {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+        }
+    }
+    .poppy-form-item-has-error
+        :not(.poppy-input-disabled):not(.poppy-input-borderless).poppy-input {
+        background-color: transparent;
+    }
+}
+.login-page-select-dropdown {
+    background: #525660 !important;
+    .poppy-select-item {
+        color: rgba(255, 255, 255, 0.85) !important;
+        font-weight: 400;
+        font-size: 14px;
+        font-family: SourceHanSansCN-Regular, sans-serif;
+        background: transparent;
+    }
+    .poppy-select-item-option--active,
+    .poppy-select-item-option-selected {
+        background: #84a5ff !important;
+    }
+    .poppy-select-item-option-active:not(.poppy-select-item-option-disabled) {
+        background: #656a75;
+    }
+}

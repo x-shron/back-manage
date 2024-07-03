@@ -1,0 +1,28 @@
+.card-layout {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    padding: 24px 18px 18px;
+    background: #fff;
+    border-radius: 2px;
+    border-radius: 8px;
+    &-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        &-title {
+            display: flex;
+            align-items: center;
+            color: #000;
+            font-weight: bold;
+            font-size: 16px;
+        }
+    }
+    &-content {
+        position: relative;
+        flex: 1;
+    }
+}

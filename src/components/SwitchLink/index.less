@@ -1,0 +1,59 @@
+@import '~@streamax/poppy/lib/style/themes/default.less';
+
+.switch-link {
+    position: absolute;
+    min-height: 100%;
+    margin-left: 4px;
+    width: 100%;
+    .ink {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        &::before {
+            position: relative;
+            z-index: 99;
+            display: block;
+            width: 2px;
+            height: 100%;
+            margin: 0 auto;
+            background-color: #f0f0f0;
+            content: ' ';
+        }
+    }
+    &-item {
+        display: flex;
+        .active-ball {
+            position: relative;
+            // top: -18px;
+            top: 6px;
+            left: 1px;
+            z-index: 999;
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #fff;
+            border: 2px solid @primary-color;
+            border-radius: 8px;
+            transform: translateX(-50%);
+            transition: top 0.3s ease-in-out;
+        }
+        .text {
+            display: inline-block;
+            // height: 14px;
+            width: calc(100% - 20px);
+            margin-bottom: 12px;
+            padding-left: 18px;
+            font-weight: 700;
+            font-size: 14px;
+            font-family: SourceHanSansCN-Bold, sans-serif;
+            text-align: left;
+            cursor: pointer;
+            opacity: 0.85;
+            &:hover,
+            &-active {
+                color: @primary-color;
+            }
+        }
+    }
+}

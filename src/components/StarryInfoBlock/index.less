@@ -1,0 +1,21 @@
+@import '~@streamax/poppy-themes/starry/index.less';
+.starry-info-block {
+    box-sizing: border-box;
+    padding: @padding-lg 0;
+    background: @component-background;
+    &-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: @padding-md;
+        &-title {
+            color: @text-color;
+            font-weight: bold;
+            font-size: @font-size-lg;
+        }
+        &-operation {
+            color: @primary-color;
+            cursor: pointer;
+        }
+    }
+}

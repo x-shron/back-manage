@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="454px" height="104px" viewBox="0 0 454 104" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="中台-登录&amp;应用管理" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="102_-登录提示2" transform="translate(-1227.000000, -130.000000)">
+            <g id="ic_title_flat" transform="translate(1228.000000, 131.000000)">
+                <text id="FTManager" font-family="SFUIText-Semibold, SF UI Text" font-size="36" font-weight="500" line-spacing="36" fill="#0B2267">
+                    <tspan x="129" y="63.5620579">FTManager</tspan>
+                </text>
+                <polyline id="Line" stroke="#0B2267" stroke-width="1.5" stroke-linecap="square" points="425.906724 96.5620579 451.559547 96.5620579 451.559547 -3.57798089e-13 0 -3.57798089e-13 2.89924761e-14 96.5620579 27.5375341 96.5620579"></polyline>
+                <text id="货运安全数据管理中心" font-family="SourceHanSansCN-Medium, Source Han Sans CN" font-size="20" font-weight="400" line-spacing="20" letter-spacing="14" fill="#0B2267">
+                    <tspan x="59.5" y="98.5620579">货运安全数据管理中心</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,22 @@
+@import '~@streamax/poppy-themes/starry/index.less';
+.details-card {
+    box-sizing: border-box;
+    padding: @padding-lg 0;
+    background: @component-background;
+    &-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 36px;
+        padding-bottom: @padding-md;
+        &-title {
+            color: @text-color;
+            font-weight: 600;
+            font-size: @font-size-lg;
+        }
+        &-operation {
+            color: @primary-color;
+            cursor: pointer;
+        }
+    }
+}
