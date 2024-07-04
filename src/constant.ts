@@ -8,3 +8,14 @@ export const GENDER_OPTIONS = [
         value: 0,
     },
 ];
+
+export const MARRIAGE_STATUS_OPTIONS = [
+    {
+        label: '已婚',
+        value: 1,
+    },
+    {
+        label: '未婚',
+        value: 0,
+    },
+];

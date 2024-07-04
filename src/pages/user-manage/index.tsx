@@ -3,25 +3,50 @@ import StarryCard from '@/components/CardLayout';
 import './index.less';
 import StarryTable from '@/components/StarryTable';
 import { QueryFormProps } from '@/components/StarryTable/QueryFrom';
-import { Cascader, Input, Select, Image } from 'antd';
-import { GENDER_OPTIONS } from '@/constant';
+import {
+    Cascader,
+    Input,
+    Select,
+    Image,
+    InputNumber,
+    Space,
+    Tooltip,
+} from 'antd';
+import { GENDER_OPTIONS, MARRIAGE_STATUS_OPTIONS } from '@/constant';
+import { getMatchmakerList } from '@/service/matchmaker';
+import { ColumnsType } from 'antd/es/table';
 import {
     getAreaAndCity,
-    getMatchmakerList,
+    getJobMap,
+    getSchoolMap,
+    getTagMap,
     getUserRoleMap,
-} from '@/service/matchmaker';
-import { ColumnsType } from 'antd/es/table';
+} from '@/service/common';
+import { transFromToOptions } from '@/utils/commonVal';
+import DetailModal from './detail-modal';
+import {
+    DeleteOutlined,
+    LinkOutlined,
+    NodeIndexOutlined,
+    PoweroffOutlined,
+} from '@ant-design/icons';
 
 const avater = require('@/assets/avter.jpg');
 
 export default () => {
     const [areaMap, setAreaMap] = useState([]);
     const [roleMap, setRoleMap] = useState([]);
+    const [jobMap, setJobMap] = useState([]);
+    const [tagMap, setTagMap] = useState([]);
+    const [schoolMap, setSchoolMap] = useState([]);
+
+    const [detailInfo, setDetailInfo] = useState(undefined);
 
     const columns: ColumnsType<any> = [
         {
             title: '序号',
             dataIndex: 'id',
+            width: 50,
             render: (text, record, index) => index + 1,
         },
         {
@@ -33,8 +58,11 @@ export default () => {
             dataIndex: 'nickName',
         },
         {
-            title: '姓名',
+            title: '真实姓名',
             dataIndex: 'name',
+            render: (text, record) => {
+                return <a onClick={() => setDetailInfo(record)}>{text}</a>;
+            },
         },
         {
             title: '性别',
@@ -45,73 +73,46 @@ export default () => {
             dataIndex: 'id2',
         },
         {
+            title: '手机号',
+            dataIndex: 'id2',
+        },
+        {
             title: '所在地',
             dataIndex: 'id2',
         },
         {
-            title: '身高',
-            dataIndex: 'id2',
-        },
-        {
-            title: '体重',
-            dataIndex: 'id',
-        },
-        {
-            title: '生肖',
-            dataIndex: 'id',
-        },
-        {
-            title: '家乡',
-            dataIndex: 'id',
-        },
-        {
             title: '职业',
-            dataIndex: 'id',
-        },
-        {
-            title: '学历',
-            dataIndex: 'id',
-        },
-        {
-            title: '毕业学校',
-            dataIndex: 'id',
+            dataIndex: 'id2',
         },
         {
             title: '婚恋状况',
             dataIndex: 'id',
         },
         {
-            title: '子女情况',
-            dataIndex: 'id',
-        },
-        {
-            title: '年收入',
-            dataIndex: 'id',
-        },
-        {
-            title: '住房',
-            dataIndex: 'id',
-        },
-        {
-            title: '汽车',
-            dataIndex: 'id',
-        },
-        {
-            title: '星座',
-            dataIndex: 'id',
-        },
-        {
-            title: '个性标签',
-            dataIndex: 'id',
-        },
-        {
-            title: '关于TA',
-            dataIndex: 'id',
-        },
-        {
             title: '操作',
             dataIndex: 'id',
             fixed: 'right',
+            render: (text, record) => {
+                return (
+                    <Space>
+                        <Tooltip title="注销用户">
+                            <a>
+                                <PoweroffOutlined />
+                            </a>
+                        </Tooltip>
+                        <Tooltip title="解绑用户">
+                            <a>
+                                <LinkOutlined />
+                            </a>
+                        </Tooltip>
+                        <Tooltip title="绑定用户">
+                            <a>
+                                <NodeIndexOutlined />
+                            </a>
+                        </Tooltip>
+                    </Space>
+                );
+            },
         },
     ];
 
@@ -121,6 +122,14 @@ export default () => {
             name: 'name',
             FeildProps: {
                 placeholder: '请输入心动号',
+            },
+            feild: Input,
+        },
+        {
+            label: '昵称/姓名',
+            name: 'name',
+            FeildProps: {
+                placeholder: '请输入姓名或昵称',
             },
             feild: Input,
         },
@@ -143,6 +152,45 @@ export default () => {
             feild: Select,
         },
         {
+            label: '性别',
+            name: 'gender',
+            FeildProps: {
+                placeholder: '请选择性别',
+                options: GENDER_OPTIONS,
+                allowClear: true,
+            },
+            feild: Select,
+        },
+        {
+            label: '年龄',
+            name: 'age',
+            FeildProps: {
+                placeholder: '请輸入年齡',
+                allowClear: true,
+            },
+            feild: InputNumber,
+        },
+        {
+            label: '职业',
+            name: 'job',
+            FeildProps: {
+                placeholder: '请选择职业',
+                options: jobMap,
+                allowClear: true,
+            },
+            feild: Select,
+        },
+        {
+            label: '婚恋状况 ',
+            name: 'marriage',
+            FeildProps: {
+                placeholder: '请选择婚恋状况 ',
+                options: MARRIAGE_STATUS_OPTIONS,
+                allowClear: true,
+            },
+            feild: Select,
+        },
+        {
             label: '区域或城市',
             name: 'areaIds',
             FeildProps: {
@@ -157,16 +205,20 @@ export default () => {
     ];
 
     useEffect(() => {
-        getAreaAndCity().then((res) => {
+        getAreaAndCity().then((res: any) => {
             setAreaMap(res);
         });
-        getUserRoleMap().then((res) => {
-            setRoleMap(
-                res.map((item: any) => ({
-                    label: item.name,
-                    value: item.id,
-                })),
-            );
+        getUserRoleMap().then((res: any) => {
+            setRoleMap(transFromToOptions(res));
+        });
+        getJobMap().then((res) => {
+            setJobMap(transFromToOptions(res));
+        });
+        getSchoolMap().then((res) => {
+            console.log('school', res);
+        });
+        getTagMap().then((res) => {
+            setTagMap(transFromToOptions(res));
         });
     }, []);
 
@@ -179,6 +231,15 @@ export default () => {
             cityId,
             areaId,
         };
+        return {
+            records: [
+                {
+                    name: 'Mr. wang',
+                    id: 1,
+                },
+            ],
+            total: 1,
+        };
         return getMatchmakerList(newParams);
     };
     return (
@@ -188,6 +249,10 @@ export default () => {
                     columns={columns}
                     getDataSource={getDataSource}
                     queryFormFeild={queryFormFeild}
+                />
+                <DetailModal
+                    detailInfo={detailInfo}
+                    onClose={() => setDetailInfo(undefined)}
                 />
             </div>
         </StarryCard>

@@ -118,7 +118,6 @@ const StarryTable: React.FC<Props> = (props, ref) => {
             <Table
                 dataSource={currentData}
                 columns={columns}
-                size="small"
                 loading={loading}
                 pagination={false}
                 {...restProps}

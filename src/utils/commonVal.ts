@@ -1,5 +1,25 @@
 import moment from 'moment';
 
+/**
+ * @param list - 列表数据
+ * @param label - 标签字段名 默认为 'name'
+ * @param value - 值字段名 默认为 'id'
+ * @returns {Array} - 转换后的列表
+ */
+export const transFromToOptions = (
+    list: any,
+    label: string = 'name',
+    value: string = 'id',
+) => {
+    // 遍历列表中每个 item，转换其 label 和 value 字段
+    return list.map((item: any) => ({
+        // 将 item 中的 label 和 value 字段返回，并加上 label 和 value 字段
+        ...item,
+        label: item[label], // 标签字段值
+        value: item[value], // 值字段值
+    }));
+};
+
 // 格式化时间戳函数
 export const formatTime = (times: any, correctToSec: any = true) => {
     if (!times) return;

@@ -62,7 +62,13 @@ export const QueryFrom: React.FC<Props> = (props) => {
                                     initialValue={initialValue}
                                     {...rest}
                                 >
-                                    {<Feild allowClear {...item.FeildProps} />}
+                                    {
+                                        <Feild
+                                            allowClear
+                                            style={{ width: '100%' }}
+                                            {...item.FeildProps}
+                                        />
+                                    }
                                 </Form.Item>
                             </Col>
                         );
