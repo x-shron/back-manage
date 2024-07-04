@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scope": "base",
+  "authors": [
+    "双"
+  ],
   "scripts": {
     "start": "umi dev",
     "build": "umi build",
-    "generate-deploy-scripts": "generate-deploy-scripts",
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",

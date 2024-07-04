@@ -26,6 +26,7 @@ import { transFromToOptions } from '@/utils/commonVal';
 import DetailModal from './detail-modal';
 import {
     DeleteOutlined,
+    DownloadOutlined,
     LinkOutlined,
     NodeIndexOutlined,
     PoweroffOutlined,
@@ -46,52 +47,64 @@ export default () => {
         {
             title: '序号',
             dataIndex: 'id',
-            width: 50,
+            width: 60,
+            ellipsis: true,
             render: (text, record, index) => index + 1,
         },
         {
             title: '心动号',
+            ellipsis: true,
             dataIndex: 'id',
         },
         {
             title: '昵称',
+            ellipsis: true,
             dataIndex: 'nickName',
         },
         {
             title: '真实姓名',
             dataIndex: 'name',
+            ellipsis: true,
             render: (text, record) => {
                 return <a onClick={() => setDetailInfo(record)}>{text}</a>;
             },
         },
         {
             title: '性别',
+            ellipsis: true,
             dataIndex: 'mobilePhone',
         },
         {
             title: '年龄',
+            ellipsis: true,
             dataIndex: 'id2',
         },
         {
             title: '手机号',
+            ellipsis: true,
             dataIndex: 'id2',
         },
         {
             title: '所在地',
+            ellipsis: true,
             dataIndex: 'id2',
         },
         {
             title: '职业',
+            ellipsis: true,
             dataIndex: 'id2',
         },
         {
             title: '婚恋状况',
             dataIndex: 'id',
+            ellipsis: true,
         },
         {
             title: '操作',
+            ellipsis: true,
             dataIndex: 'id',
             fixed: 'right',
+            width: 150,
             render: (text, record) => {
                 return (
                     <Space>
@@ -249,6 +262,11 @@ export default () => {
                     columns={columns}
                     getDataSource={getDataSource}
                     queryFormFeild={queryFormFeild}
+                    rightTool={[
+                        <a title="下载">
+                            <DownloadOutlined />
+                        </a>,
+                    ]}
                 />
                 <DetailModal
                     detailInfo={detailInfo}

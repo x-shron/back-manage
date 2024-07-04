@@ -31,6 +31,16 @@ const menuList = [
                 path: '/user-list',
                 children: [],
             },
+            {
+                title: '用户订单',
+                path: '/user-order',
+                children: [],
+            },
+            {
+                title: '用户邀约关系查询',
+                path: '/user-query-relation',
+                children: [],
+            },
         ],
     },
     {

@@ -6,7 +6,15 @@ import React, {
     useState,
 } from 'react';
 import './index.less';
-import { Affix, Button, Form, Pagination, PaginationProps, Table } from 'antd';
+import {
+    Affix,
+    Button,
+    Form,
+    Pagination,
+    PaginationProps,
+    Space,
+    Table,
+} from 'antd';
 import { QueryFormProps, QueryFrom } from './QueryFrom';
 import { ColumnsType } from 'antd/es/table';
 import { useUpdateEffect } from 'ahooks';
@@ -18,6 +26,7 @@ interface Props extends TableProps {
     queryFormFeild?: QueryFormProps;
     fetchDataAfterMount?: boolean; // 是否在挂载后加载数据后
     leftTool?: ReactNode;
+    rightTool?: ReactNode;
     showReload?: boolean;
 }
 
@@ -36,6 +45,7 @@ const StarryTable: React.FC<Props> = (props, ref) => {
         fetchDataAfterMount = true,
         leftTool,
         showReload = true,
+        rightTool,
         ...restProps
     } = props;
     const [loading, setLoading] = useState(false);
@@ -106,13 +116,16 @@ const StarryTable: React.FC<Props> = (props, ref) => {
             <div className="tool-bar-container">
                 <div> {leftTool}</div>
                 {showReload && (
-                    <div>
-                        <ReloadOutlined
-                            onClick={() => fetchData()}
-                            className="reload"
-                            spin={loading}
-                        />
-                    </div>
+                    <Space>
+                        {rightTool}
+                        <a title="刷新">
+                            <ReloadOutlined
+                                onClick={() => fetchData()}
+                                className="reload"
+                                spin={loading}
+                            />
+                        </a>
+                    </Space>
                 )}
             </div>
             <Table

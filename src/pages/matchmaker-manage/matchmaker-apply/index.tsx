@@ -6,10 +6,11 @@ import StarryTable, { RefStarryTable } from '@/components/StarryTable';
 import { QueryFormProps } from '@/components/StarryTable/QueryFrom';
 import { Cascader, Input, Select, Image, Divider, Space, Tooltip } from 'antd';
 import { GENDER_OPTIONS } from '@/constant';
-import { getAreaAndCity, getMatchmakerList } from '@/service/matchmaker';
+import { getMatchmakerList } from '@/service/matchmaker';
 import { ColumnsType } from 'antd/es/table';
 import classNames from 'classnames';
 import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons';
+import { getAreaAndCity } from '@/service/common';
 
 const avater = require('@/assets/avter.jpg');
 

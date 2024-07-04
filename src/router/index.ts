@@ -58,6 +58,12 @@ const routes = [
         exact: true,
         title: '用户列表',
     },
+    {
+        path: '/user-order',
+        component: '@/pages/user-manage/user-order',
+        exact: true,
+        title: '用户订单',
+    },
 ];
 
 export default routes;

@@ -2,6 +2,7 @@ import { Descriptions, Divider, Modal, Tabs, TabsProps, Tag } from 'antd';
 import { DescriptionsItemType } from 'antd/es/descriptions';
 import React, { useEffect, useState } from 'react';
 import './index.less';
+import TimeInfo from './time-info';
 
 const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
     const [visible, setVisible] = useState(false);
@@ -77,6 +78,11 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
 
     const tabsItems: TabsProps['items'] = [
         {
+            key: '0',
+            label: 'TA的动态',
+            children: <TimeInfo />,
+        },
+        {
             key: '1',
             label: '自我评价',
             children: 'Content of Tab Pane 1',
@@ -100,7 +106,7 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
 
     return (
         <Modal
-            width={'70%'}
+            width={'60%'}
             title={`用户详情`}
             footer={null}
             centered
@@ -108,7 +114,10 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
             open={visible}
             className="user-detail-modal"
         >
-            <div className="detail-modal-title">基本信息</div>
+            <div className="detail-modal-title">
+                基本信息
+                <span>{`（注册时间： --）`}</span>
+            </div>
             <Descriptions className="detail-item" items={items} />
             <div className="detail-modal-title">个性标签</div>
             <div className="detail-item">
@@ -120,7 +129,12 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
             </div>
             <div className="detail-modal-title">关于他</div>
             <div className="detail-item">
-                <Tabs type="card" defaultActiveKey="1" items={tabsItems} />
+                <Tabs
+                    destroyInactiveTabPane
+                    type="card"
+                    defaultActiveKey="0"
+                    items={tabsItems}
+                />
             </div>
             <div className="detail-modal-title">留言板</div>
             <div className="detail-item">
