@@ -5,8 +5,9 @@ import StarryTable from '@/components/StarryTable';
 import { QueryFormProps } from '@/components/StarryTable/QueryFrom';
 import { Cascader, Input, Select, Image } from 'antd';
 import { GENDER_OPTIONS } from '@/constant';
-import { getAreaAndCity, getMatchmakerList } from '@/service/matchmaker';
+import { getMatchmakerList } from '@/service/matchmaker';
 import { ColumnsType } from 'antd/es/table';
+import { getAreaAndCity } from '@/service/common';
 
 const avater = require('@/assets/avter.jpg');
 
