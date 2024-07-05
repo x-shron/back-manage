@@ -1,11 +1,23 @@
-import { Descriptions, Divider, Modal, Tabs, TabsProps, Tag } from 'antd';
+import {
+    Descriptions,
+    Divider,
+    Input,
+    Modal,
+    Radio,
+    Space,
+    Tabs,
+    TabsProps,
+    Tag,
+} from 'antd';
 import { DescriptionsItemType } from 'antd/es/descriptions';
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import TimeInfo from './time-info';
+import { EditOutlined } from '@ant-design/icons';
 
 const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
     const [visible, setVisible] = useState(false);
+    const [momVisible, setMomVisible] = useState(false);
     useEffect(() => {
         if (detailInfo?.id) {
             setVisible(true);
@@ -72,7 +84,14 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
         },
         {
             label: '平台备注',
-            children: detailInfo?.degree || '--',
+            children: (
+                <Space>
+                    {detailInfo?.degree || '--'}
+                    <a onClick={() => setMomVisible(true)}>
+                        <EditOutlined />
+                    </a>
+                </Space>
+            ),
         },
     ];
 
@@ -104,6 +123,42 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
         },
     ];
 
+    const labelItems: TabsProps['items'] = [
+        {
+            key: '0',
+            label: '现在状态',
+            children: (
+                <>
+                    <Tag color="magenta">magenta</Tag>
+                    <Tag color="red">red</Tag>
+                    <Tag color="green">green</Tag>
+                    <Tag color="orange">orange</Tag>
+                    <Tag color="gold">gold</Tag>
+                </>
+            ),
+        },
+        {
+            key: '1',
+            label: '理想生活',
+            children: (
+                <>
+                    <Tag color="green">green</Tag>
+                    <Tag color="cyan">cyan</Tag>
+                    <Tag color="geekblue">geekblue</Tag>
+                    <Tag color="purple">purple</Tag>
+                </>
+            ),
+        },
+        {
+            key: '2',
+            label: '我的梦想',
+            children: (
+                <> 
+                    <Tag color="blue">blue</Tag>
+                </>
+            ),
+        },
+    ];
     return (
         <Modal
             width={'60%'}
@@ -113,6 +168,7 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
             onCancel={onCancel}
             open={visible}
             className="user-detail-modal"
+            destroyOnClose
         >
             <div className="detail-modal-title">
                 基本信息
@@ -121,17 +177,16 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
             <Descriptions className="detail-item" items={items} />
             <div className="detail-modal-title">个性标签</div>
             <div className="detail-item">
-                <Tag color="magenta">magenta</Tag>
-                <Tag color="red">red</Tag>
-                <Tag color="volcano">volcano</Tag>
-                <Tag color="orange">orange</Tag>
-                <Tag color="gold">gold</Tag>
+                <Tabs
+                    destroyInactiveTabPane
+                    defaultActiveKey="0"
+                    items={labelItems}
+                />
             </div>
             <div className="detail-modal-title">关于他</div>
             <div className="detail-item">
                 <Tabs
                     destroyInactiveTabPane
-                    type="card"
                     defaultActiveKey="0"
                     items={tabsItems}
                 />
@@ -142,7 +197,24 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
                     <span className="detail-label">xxxxx留言: </span>
                     <span>你好啊</span>
                 </div>
+                <div>
+                    <span className="detail-label">xxxxx留言: </span>
+                    <span>来了啊</span>
+                </div>
             </div>
+            <Modal
+                width={'30%'}
+                title={`平台备注`}
+                centered
+                onCancel={() => setMomVisible(false)}
+                open={momVisible}
+                destroyOnClose
+            >
+                <Input.TextArea
+                    autoSize={{ minRows: 4, maxRows: 8 }}
+                    placeholder="请输入备注"
+                />
+            </Modal>
         </Modal>
     );
 };
