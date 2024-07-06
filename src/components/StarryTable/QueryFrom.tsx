@@ -39,7 +39,11 @@ export const QueryFrom: React.FC<Props> = (props) => {
     const reset = () => {
         form.resetFields();
         const params = form.getFieldsValue();
-        onChange?.({ ...params });
+        onChange?.({
+            ...params,
+            pageNo: 1,
+            pageSize: 10,
+        });
     };
 
     return (

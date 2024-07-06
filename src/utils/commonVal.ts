@@ -82,6 +82,13 @@ export const validatorLettersAndNumber = (rule: any, value: any) => {
     return Promise.resolve();
 };
 
+export const validatorHeartNo = (rule: any, value: any) => {
+    if (value && !/^[0-9]*$/g.test(value)) {
+        return Promise.reject('心动号只能输入数字');
+    }
+    return Promise.resolve();
+};
+
 /**
  *  @param {any[]} data 数据源
  *  第二个参数为一个对象，可传以下指进行配置

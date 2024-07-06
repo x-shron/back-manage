@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import StarryCard from '@/components/CardLayout';
 import './index.less';
-import StarryTable from '@/components/StarryTable';
+import StarryTable, { RefStarryTable } from '@/components/StarryTable';
 import { QueryFormProps } from '@/components/StarryTable/QueryFrom';
 import {
     Cascader,
@@ -11,9 +11,16 @@ import {
     InputNumber,
     Space,
     Tooltip,
+    Modal,
+    message,
 } from 'antd';
 import { GENDER_OPTIONS, MARRIAGE_STATUS_OPTIONS } from '@/constant';
-import { getMatchmakerList } from '@/service/matchmaker';
+import {
+    bindUser,
+    deleteUser,
+    getUserList,
+    unbindUser,
+} from '@/service/matchmaker';
 import { ColumnsType } from 'antd/es/table';
 import {
     getAreaAndCity,
@@ -31,6 +38,7 @@ import {
     NodeIndexOutlined,
     PoweroffOutlined,
 } from '@ant-design/icons';
+import BindUser from './bindUser';
 
 const avater = require('@/assets/avter.jpg');
 
@@ -41,16 +49,54 @@ export default () => {
     const [tagMap, setTagMap] = useState([]);
     const [schoolMap, setSchoolMap] = useState([]);
 
+    const tableRef = useRef<RefStarryTable>(null);
+
     const [detailInfo, setDetailInfo] = useState(undefined);
 
+    const [currentUser, setCurrentUser] = useState<any>(undefined);
+
+    const logOff = (record: any) => {
+        Modal.confirm({
+            content: `确定要注销 "${
+                record.name || record.nickName || '-'
+            }" 账号吗？`,
+            centered: true,
+            onOk() {
+                deleteUser(record.id).then(() => {
+                    message.success('注销成功');
+                    tableRef.current?.reload();
+                });
+            },
+        });
+    };
+
+    const unbind = (record: any) => {
+        Modal.confirm({
+            content: `确定要解绑 "${
+                record.name || record.nickName || '-'
+            }" 账号吗？`,
+            centered: true,
+            onOk() {
+                unbindUser({ currentUserId: record.id }).then(() => {
+                    message.success('解绑成功');
+                    tableRef.current?.reload();
+                });
+            },
+        });
+    };
+
+    const bind = (values: any) => {
+        bindUser({
+            ...values,
+            currentUserId: currentUser.id,
+        }).then(() => {
+            message.success('绑定成功');
+            tableRef.current?.reload();
+        });
+        setCurrentUser(undefined);
+    };
+
     const columns: ColumnsType<any> = [
-        {
-            title: '序号',
-            dataIndex: 'id',
-            width: 60,
-            ellipsis: true,
-            render: (text, record, index) => index + 1,
-        },
         {
             title: '心动号',
             ellipsis: true,
@@ -60,6 +106,9 @@ export default () => {
             title: '昵称',
             ellipsis: true,
             dataIndex: 'nickName',
+            render: (text, record) => {
+                return <a onClick={() => setDetailInfo(record)}>{text}</a>;
+            },
         },
         {
             title: '真实姓名',
@@ -72,31 +121,31 @@ export default () => {
         {
             title: '性别',
             ellipsis: true,
-            dataIndex: 'mobilePhone',
+            dataIndex: 'sexName',
         },
         {
             title: '年龄',
             ellipsis: true,
-            dataIndex: 'id2',
+            dataIndex: 'age',
         },
         {
             title: '手机号',
             ellipsis: true,
-            dataIndex: 'id2',
+            dataIndex: 'mobilePhone',
         },
         {
             title: '所在地',
             ellipsis: true,
-            dataIndex: 'id2',
+            dataIndex: 'houseStatusName',
         },
         {
             title: '职业',
             ellipsis: true,
-            dataIndex: 'id2',
+            dataIndex: 'vocationName',
         },
         {
             title: '婚恋状况',
-            dataIndex: 'id',
+            dataIndex: 'friendTypeName',
             ellipsis: true,
         },
         {
@@ -109,17 +158,17 @@ export default () => {
                 return (
                     <Space>
                         <Tooltip title="注销用户">
-                            <a>
+                            <a onClick={() => logOff(record)}>
                                 <PoweroffOutlined />
                             </a>
                         </Tooltip>
                         <Tooltip title="解绑用户">
-                            <a>
+                            <a onClick={() => unbind(record)}>
                                 <LinkOutlined />
                             </a>
                         </Tooltip>
                         <Tooltip title="绑定用户">
-                            <a>
+                            <a onClick={() => setCurrentUser(record)}>
                                 <NodeIndexOutlined />
                             </a>
                         </Tooltip>
@@ -132,7 +181,7 @@ export default () => {
     const queryFormFeild: QueryFormProps = [
         {
             label: '心动号',
-            name: 'name',
+            name: 'id',
             FeildProps: {
                 placeholder: '请输入心动号',
             },
@@ -148,7 +197,7 @@ export default () => {
         },
         {
             label: '手机号',
-            name: 'iphone',
+            name: 'mobilePhone',
             FeildProps: {
                 placeholder: '请输入手机号',
             },
@@ -185,7 +234,7 @@ export default () => {
         },
         {
             label: '职业',
-            name: 'job',
+            name: 'vocation',
             FeildProps: {
                 placeholder: '请选择职业',
                 options: jobMap,
@@ -195,7 +244,7 @@ export default () => {
         },
         {
             label: '婚恋状况 ',
-            name: 'marriage',
+            name: 'marriageStatus',
             FeildProps: {
                 placeholder: '请选择婚恋状况 ',
                 options: MARRIAGE_STATUS_OPTIONS,
@@ -240,20 +289,12 @@ export default () => {
         const [provinceId, cityId, areaId] = areaIds || [];
         const newParams = {
             ...params,
+            pageNum: params.pageNo,
             provinceId,
             cityId,
             areaId,
         };
-        return {
-            records: [
-                {
-                    name: 'Mr. wang',
-                    id: 1,
-                },
-            ],
-            total: 1,
-        };
-        return getMatchmakerList(newParams);
+        return getUserList(newParams);
     };
     return (
         <StarryCard>
@@ -262,6 +303,7 @@ export default () => {
                     columns={columns}
                     getDataSource={getDataSource}
                     queryFormFeild={queryFormFeild}
+                    ref={tableRef}
                     rightTool={[
                         <a title="下载">
                             <DownloadOutlined />
@@ -271,6 +313,11 @@ export default () => {
                 <DetailModal
                     detailInfo={detailInfo}
                     onClose={() => setDetailInfo(undefined)}
+                />
+                <BindUser
+                    visible={!!currentUser?.id}
+                    onCancel={() => setCurrentUser(undefined)}
+                    onOk={bind}
                 />
             </div>
         </StarryCard>

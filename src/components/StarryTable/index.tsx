@@ -79,9 +79,9 @@ const StarryTable: React.FC<Props> = (props, ref) => {
     const queryFormChange = (value: any) => {
         const { pageNo, pageSize } = queryParams;
         setPueryParams({
-            ...value,
             pageNo,
             pageSize,
+            ...value,
         });
     };
 
@@ -144,6 +144,7 @@ const StarryTable: React.FC<Props> = (props, ref) => {
                         current={queryParams.pageNo}
                         total={totalNum}
                         className="pagination-custorm"
+                        showTotal={(total) => `共 ${total} 条`}
                     />
                 </Affix>
             )}

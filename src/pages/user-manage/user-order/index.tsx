@@ -1,18 +1,22 @@
 import CardLayout from '@/components/CardLayout';
-import { Space, Tabs, Tooltip } from 'antd';
+import { Input, message, Space, Tabs, Tooltip } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import StarryTable, { RefStarryTable } from '@/components/StarryTable';
 import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons';
-import { getMarriageList } from '@/service/matchmaker';
+import { getOrderList } from '@/service/matchmaker';
 import { ColumnsType } from 'antd/es/table';
 
 import './index.less';
+import { useDebounceEffect, useUpdateEffect } from 'ahooks';
+import { validatorHeartNo } from '@/utils/commonVal';
 
 const UserOrder = () => {
-    const [activeKey, setActiveKey] = useState<string | undefined>(undefined);
+    const [activeKey, setActiveKey] = useState<string | undefined>('-1');
     const tabREf = useRef<RefStarryTable>(null);
 
-    useEffect(() => {
+    const [userId, setUserId] = useState<any>(undefined);
+
+    useUpdateEffect(() => {
         tabREf.current?.reload();
     }, [activeKey]);
 
@@ -56,10 +60,10 @@ const UserOrder = () => {
     const getDataSource = async (params: any) => {
         const newParams = {
             ...params,
-            audit: activeKey == '-1' ? undefined : activeKey,
-            type: '4', // 相亲
+            status: activeKey == '-1' ? undefined : activeKey,
+            userId,
         };
-        return getMarriageList(newParams);
+        return getOrderList(newParams);
     };
 
     const orderStatusMap = [
@@ -69,21 +73,44 @@ const UserOrder = () => {
         },
         {
             label: '待支付',
-            key: '0',
-        },
-        {
-            label: '服务中',
             key: '1',
         },
         {
-            label: '已取消',
+            label: '支付中',
             key: '2',
         },
         {
-            label: '已完成',
+            label: '已付款',
             key: '3',
         },
+        {
+            label: '取消',
+            key: '4',
+        },
+        {
+            label: '退款中',
+            key: '5',
+        },
+        {
+            label: '已退款',
+            key: '6',
+        },
     ];
+
+    useDebounceEffect(
+        () => {
+            validatorHeartNo(undefined, userId).then(
+                () => {
+                    tabREf.current?.reload();
+                },
+                (error) => {
+                    message.error(error);
+                },
+            );
+        },
+        [userId],
+        { wait: 500 },
+    );
 
     return (
         <CardLayout className="user-order-container">
@@ -100,6 +127,14 @@ const UserOrder = () => {
                     getDataSource={getDataSource}
                     fetchDataAfterMount={false}
                     ref={tabREf}
+                    leftTool={[
+                        <Input
+                            allowClear
+                            value={userId}
+                            onChange={(e) => setUserId(e.target.value)}
+                            placeholder="请输入心动号"
+                        />,
+                    ]}
                 />
             </div>
         </CardLayout>
