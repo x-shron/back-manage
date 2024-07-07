@@ -15,7 +15,8 @@ import './index.less';
 import TimeInfo from './time-info';
 import { EditOutlined } from '@ant-design/icons';
 
-const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
+const DetailModal: React.FC<any> = (props) => {
+    const { detailInfo = {}, onClose } = props;
     const [visible, setVisible] = useState(false);
     const [momVisible, setMomVisible] = useState(false);
     useEffect(() => {
@@ -32,55 +33,58 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
     const items: DescriptionsItemType[] = [
         {
             label: '姓名',
-            children: detailInfo?.name || '--',
+            children: detailInfo?.name || detailInfo?.nickName || '--',
         },
         {
             label: '身高',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.height || '--',
         },
         {
             label: '体重',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.weight || '--',
         },
         {
             label: '生肖',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.animalSignName || '--',
         },
         {
             label: '家乡',
-            children: detailInfo?.degree || '--',
+            children:
+                (detailInfo?.homeProvince || '-') +
+                (detailInfo?.homeCity || '-') +
+                (detailInfo?.homeArea || '-'),
         },
         {
             label: '职业',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.vocationName || '--',
         },
         {
             label: '学历',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.degreeName || '--',
         },
         {
             label: '毕业学校',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.gradulateSchool || '--',
         },
         {
             label: '子女情况',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.childrenStatusName || '--',
         },
         {
             label: '年收入',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.yearSalary || '--',
         },
         {
             label: '住房',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.houseStatusName || '--',
         },
         {
             label: '汽车',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.carStatusName || '--',
         },
         {
             label: '星座',
-            children: detailInfo?.degree || '--',
+            children: detailInfo?.starSignName || '--',
         },
         {
             label: '平台备注',
@@ -153,7 +157,7 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
             key: '2',
             label: '我的梦想',
             children: (
-                <> 
+                <>
                     <Tag color="blue">blue</Tag>
                 </>
             ),
@@ -172,7 +176,7 @@ const DetailModal: React.FC<any> = ({ detailInfo, onClose }) => {
         >
             <div className="detail-modal-title">
                 基本信息
-                <span>{`（注册时间： --）`}</span>
+                <span>{`注册时间： (${detailInfo.createTime || '--'})`}</span>
             </div>
             <Descriptions className="detail-item" items={items} />
             <div className="detail-modal-title">个性标签</div>

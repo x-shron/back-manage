@@ -13,6 +13,7 @@ import {
     Tooltip,
     Modal,
     message,
+    Avatar,
 } from 'antd';
 import { GENDER_OPTIONS, MARRIAGE_STATUS_OPTIONS } from '@/constant';
 import {
@@ -116,6 +117,14 @@ export default () => {
             ellipsis: true,
             render: (text, record) => {
                 return <a onClick={() => setDetailInfo(record)}>{text}</a>;
+            },
+        },
+        {
+            title: '头像',
+            ellipsis: true,
+            dataIndex: 'headImg',
+            render: (text, record) => {
+                return <Avatar src={record.headImg || avater} />;
             },
         },
         {

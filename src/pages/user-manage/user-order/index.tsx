@@ -22,20 +22,18 @@ const UserOrder = () => {
 
     const columns: ColumnsType<any> = [
         {
-            title: '序号',
-            dataIndex: 'id',
-            render: (text, record, index) => index + 1,
-            fixed: 'left',
-            width: 60,
-        },
-        {
             title: '订单号',
             dataIndex: 'id',
             fixed: 'left',
         },
         {
+            title: '心动号',
+            dataIndex: 'userId',
+            fixed: 'left',
+        },
+        {
             title: '订单状态',
-            dataIndex: 'name',
+            dataIndex: 'status',
             fixed: 'left',
         },
         {
@@ -45,11 +43,11 @@ const UserOrder = () => {
 
         {
             title: '项目金额',
-            dataIndex: 'sexName',
+            dataIndex: 'price',
         },
         {
             title: '下单时间',
-            dataIndex: 'sexName',
+            dataIndex: 'createTime',
         },
         {
             title: '到期时间',

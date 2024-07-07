@@ -11,11 +11,15 @@ export const GENDER_OPTIONS = [
 
 export const MARRIAGE_STATUS_OPTIONS = [
     {
-        label: '已婚',
+        label: '未婚',
         value: 1,
     },
     {
-        label: '未婚',
-        value: 0,
+        label: '离异',
+        value: 2,
+    },
+    {
+        label: '已婚',
+        value: 3,
     },
 ];
