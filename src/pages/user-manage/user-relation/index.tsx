@@ -5,10 +5,12 @@ import { Button, Form, Input, Space } from 'antd';
 import * as echarts from 'echarts';
 import { useDebounceFn } from 'ahooks';
 import { randomColor } from '@/utils/commonVal';
+import { uniqueId } from 'lodash';
 
 const UserRelation = () => {
     const chartRef = useRef<echarts.EChartsType>();
-    const [detail, setDetail] = useState({});
+    const [detail, setDetail] = useState<any>({});
+    const hasLoadId = useRef<any>({});
 
     const loadUser = () => {};
 
@@ -29,7 +31,7 @@ const UserRelation = () => {
     };
 
     useEffect(() => {
-        const option = {
+        const option: any = {
             tooltip: {
                 formatter: formatter,
             },
@@ -41,12 +43,13 @@ const UserRelation = () => {
             series: [
                 {
                     type: 'graph',
+                    name: 'users',
                     layout: 'force',
                     edgeSymbol: ['circle', 'arrow'],
                     roam: true,
                     animation: true,
                     edgeSymbolSize: [0, 5],
-                    data: [
+                    nodes: [
                         {
                             name: '夏双',
                             value: 10,
@@ -90,7 +93,7 @@ const UserRelation = () => {
                             },
                         },
                     ],
-                    links: [
+                    edges: [
                         {
                             source: '夏双',
                             target: '张强',
@@ -118,6 +121,27 @@ const UserRelation = () => {
             ],
         };
         chartRef.current?.setOption(option);
+        hasLoadId.current[detail.id] = true;
+        chartRef.current?.on('click', { dataType: 'node' }, function (e: any) {
+            if (!hasLoadId.current[e.data.value]) {
+                const value = uniqueId();
+                console.log(value);
+                option.series[0].nodes.push({
+                    name: `随机名称${value}`,
+                    value,
+                    symbolSize: 100,
+                    itemStyle: {
+                        color: randomColor(128),
+                    },
+                });
+                option.series[0].edges.push({
+                    source: e.data.name,
+                    target: `随机名称${value}`,
+                });
+                console.log('1232132', option.series[0]);
+                chartRef.current?.setOption(option);
+            }
+        });
     }, [detail]);
 
     const _resizeChart = () => {
