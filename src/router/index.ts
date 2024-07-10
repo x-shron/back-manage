@@ -64,6 +64,12 @@ const routes = [
         exact: true,
         title: '用户订单',
     },
+    {
+        path: '/user-query-relation',
+        component: '@/pages/user-manage/user-relation',
+        exact: true,
+        title: '用户邀约关系',
+    },
 ];
 
 export default routes;

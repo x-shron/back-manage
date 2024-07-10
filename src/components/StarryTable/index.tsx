@@ -89,7 +89,7 @@ const StarryTable: React.FC<Props> = (props, ref) => {
         setLoading(true);
         getDataSource({ ...queryParams, ...params })
             .then((res: any) => {
-                setCurrentData(res?.records || []);
+                setCurrentData(res?.records || res?.list || []);
                 setTotalNum(res?.total || 0);
             })
             .finally(() => {

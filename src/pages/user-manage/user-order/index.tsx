@@ -10,6 +10,21 @@ import './index.less';
 import { useDebounceEffect, useUpdateEffect } from 'ahooks';
 import { validatorHeartNo } from '@/utils/commonVal';
 
+const bizTypeMap = [
+    {
+        key: 4,
+        label: '相亲订单',
+    },
+    {
+        key: 2,
+        label: 'VIP充值',
+    },
+    {
+        key: 3,
+        label: '畅聊充值',
+    },
+];
+
 const UserOrder = () => {
     const [activeKey, setActiveKey] = useState<string | undefined>('-1');
     const tabREf = useRef<RefStarryTable>(null);
@@ -35,23 +50,34 @@ const UserOrder = () => {
             title: '订单状态',
             dataIndex: 'status',
             fixed: 'left',
+            render: (text) => {
+                return orderStatusMap.find((item) => item.key == text)?.label;
+            },
         },
         {
             title: '项目名称',
-            dataIndex: 'nickName',
+            dataIndex: 'bizType',
+            render: (text) => {
+                return bizTypeMap.find((item) => item.key == text)?.label;
+            },
         },
-
         {
             title: '项目金额',
             dataIndex: 'price',
+            render: (text) => `${(text / 100).toFixed(2)}元`,
+        },
+        {
+            title: '实际支付金额',
+            dataIndex: 'payFee',
+            render: (text) => `${(text / 100).toFixed(2)}元`,
         },
         {
             title: '下单时间',
             dataIndex: 'createTime',
         },
         {
-            title: '到期时间',
-            dataIndex: 'sexName',
+            title: '支付时间',
+            dataIndex: 'payTime',
         },
     ];
 

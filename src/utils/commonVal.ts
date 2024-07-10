@@ -20,6 +20,14 @@ export const transFromToOptions = (
     }));
 };
 
+export function randomColor(offset = 0) {
+    let r = Math.floor(Math.random() * (256 - offset) + offset);
+    let g = Math.floor(Math.random() * (256 - offset) + offset);
+    let b = Math.floor(Math.random() * (256 - offset) + offset);
+    let rgb = 'rgb(' + r + ',' + g + ',' + b + ')';
+    return rgb;
+}
+
 // 格式化时间戳函数
 export const formatTime = (times: any, correctToSec: any = true) => {
     if (!times) return;

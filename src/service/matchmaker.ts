@@ -64,7 +64,27 @@ export const bindUser = async (params: any) => {
 export const getOrderList = async (params: any) => {
     const res = await request({
         method: 'post',
-        url: `/api/order/list`,
+        url: `/api/bk/query/order`,
+        data: params,
+        showFailedMessage: false,
+    });
+    return res.data;
+};
+
+export const getUserDetail = async (params: any) => {
+    const res = await request({
+        method: 'get',
+        url: `/api/bk/user/detail`,
+        params,
+        showFailedMessage: false,
+    });
+    return res.data;
+};
+
+export const modifyUserDetail = async (params: any) => {
+    const res = await request({
+        method: 'post',
+        url: `/api/user/modify`,
         data: params,
         showFailedMessage: false,
     });

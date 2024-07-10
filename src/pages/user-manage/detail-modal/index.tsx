@@ -2,9 +2,11 @@ import {
     Descriptions,
     Divider,
     Input,
+    message,
     Modal,
     Radio,
     Space,
+    Spin,
     Tabs,
     TabsProps,
     Tag,
@@ -14,16 +16,36 @@ import React, { useEffect, useState } from 'react';
 import './index.less';
 import TimeInfo from './time-info';
 import { EditOutlined } from '@ant-design/icons';
+import { getUserDetail, modifyUserDetail } from '@/service/matchmaker';
+import { randomColor } from '@/utils/commonVal';
 
 const DetailModal: React.FC<any> = (props) => {
-    const { detailInfo = {}, onClose } = props;
+    const { detailInfo: info, onClose } = props;
+    const [detailInfo, setDetailInfo] = useState<any>({});
     const [visible, setVisible] = useState(false);
     const [momVisible, setMomVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
-        if (detailInfo?.id) {
+        if (info?.id) {
+            setDetailInfo(info);
             setVisible(true);
+            setLoading(true);
+            getUserDetail({
+                userId: info.id,
+            })
+                .then((res) => {
+                    console.log(res, 'first');
+                    setDetailInfo({
+                        ...info,
+                        ...res.userBaseInfo,
+                    });
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        } else {
         }
-    }, [detailInfo]);
+    }, [info]);
 
     const onCancel = () => {
         setVisible(false);
@@ -87,10 +109,10 @@ const DetailModal: React.FC<any> = (props) => {
             children: detailInfo?.starSignName || '--',
         },
         {
-            label: '平台备注',
+            label: '平台备注' || '--',
             children: (
                 <Space>
-                    {detailInfo?.degree || '--'}
+                    {detailInfo?.remark || '--'}
                     <a onClick={() => setMomVisible(true)}>
                         <EditOutlined />
                     </a>
@@ -108,12 +130,12 @@ const DetailModal: React.FC<any> = (props) => {
         {
             key: '1',
             label: '自我评价',
-            children: 'Content of Tab Pane 1',
+            children: detailInfo.userIntroduce || '--',
         },
         {
             key: '2',
             label: '家庭背景',
-            children: 'Content of Tab Pane 2',
+            children: detailInfo.homeBackground || '--',
         },
         {
             key: '3',
@@ -123,7 +145,7 @@ const DetailModal: React.FC<any> = (props) => {
         {
             key: '4',
             label: '理想的另一半',
-            children: 'Content of Tab Pane 3',
+            children: detailInfo.requireInfos,
         },
     ];
 
@@ -133,11 +155,9 @@ const DetailModal: React.FC<any> = (props) => {
             label: '现在状态',
             children: (
                 <>
-                    <Tag color="magenta">magenta</Tag>
-                    <Tag color="red">red</Tag>
-                    <Tag color="green">green</Tag>
-                    <Tag color="orange">orange</Tag>
-                    <Tag color="gold">gold</Tag>
+                    {detailInfo?.tagList?.map((item: any) => {
+                        return <Tag color={randomColor(128)}>{item}</Tag>;
+                    })}
                 </>
             ),
         },
@@ -146,10 +166,9 @@ const DetailModal: React.FC<any> = (props) => {
             label: '理想生活',
             children: (
                 <>
-                    <Tag color="green">green</Tag>
-                    <Tag color="cyan">cyan</Tag>
-                    <Tag color="geekblue">geekblue</Tag>
-                    <Tag color="purple">purple</Tag>
+                    {detailInfo?.idealLifeList?.map((item: any) => {
+                        return <Tag color={randomColor(128)}>{item}</Tag>;
+                    })}
                 </>
             ),
         },
@@ -158,11 +177,23 @@ const DetailModal: React.FC<any> = (props) => {
             label: '我的梦想',
             children: (
                 <>
-                    <Tag color="blue">blue</Tag>
+                    {detailInfo?.dreamList?.map((item: any) => {
+                        return <Tag color={randomColor()}>{item}</Tag>;
+                    })}
                 </>
             ),
         },
     ];
+
+    const modifyRemark = () => {
+        modifyUserDetail(detailInfo)
+            .then((res) => {
+                message.success('修改成功');
+            })
+            .finally(() => {
+                setMomVisible(false);
+            });
+    };
     return (
         <Modal
             width={'60%'}
@@ -174,51 +205,63 @@ const DetailModal: React.FC<any> = (props) => {
             className="user-detail-modal"
             destroyOnClose
         >
-            <div className="detail-modal-title">
-                基本信息
-                <span>{`注册时间： (${detailInfo.createTime || '--'})`}</span>
-            </div>
-            <Descriptions className="detail-item" items={items} />
-            <div className="detail-modal-title">个性标签</div>
-            <div className="detail-item">
-                <Tabs
-                    destroyInactiveTabPane
-                    defaultActiveKey="0"
-                    items={labelItems}
-                />
-            </div>
-            <div className="detail-modal-title">关于他</div>
-            <div className="detail-item">
-                <Tabs
-                    destroyInactiveTabPane
-                    defaultActiveKey="0"
-                    items={tabsItems}
-                />
-            </div>
-            <div className="detail-modal-title">留言板</div>
-            <div className="detail-item">
-                <div>
-                    <span className="detail-label">xxxxx留言: </span>
-                    <span>你好啊</span>
+            <Spin spinning={loading}>
+                <div className="detail-modal-title">
+                    基本信息
+                    <span>{`注册时间： (${
+                        detailInfo.createTime || '--'
+                    })`}</span>
                 </div>
-                <div>
-                    <span className="detail-label">xxxxx留言: </span>
-                    <span>来了啊</span>
+                <Descriptions className="detail-item" items={items} />
+                <div className="detail-modal-title">个性标签</div>
+                <div className="detail-item">
+                    <Tabs
+                        destroyInactiveTabPane
+                        defaultActiveKey="0"
+                        items={labelItems}
+                    />
                 </div>
-            </div>
-            <Modal
-                width={'30%'}
-                title={`平台备注`}
-                centered
-                onCancel={() => setMomVisible(false)}
-                open={momVisible}
-                destroyOnClose
-            >
-                <Input.TextArea
-                    autoSize={{ minRows: 4, maxRows: 8 }}
-                    placeholder="请输入备注"
-                />
-            </Modal>
+                <div className="detail-modal-title">关于他</div>
+                <div className="detail-item">
+                    <Tabs
+                        destroyInactiveTabPane
+                        defaultActiveKey="0"
+                        items={tabsItems}
+                    />
+                </div>
+                <div className="detail-modal-title">留言板</div>
+                <div className="detail-item">
+                    <div>
+                        <span className="detail-label">xxxxx留言: </span>
+                        <span>你好啊</span>
+                    </div>
+                    <div>
+                        <span className="detail-label">xxxxx留言: </span>
+                        <span>来了啊</span>
+                    </div>
+                </div>
+                <Modal
+                    width={'30%'}
+                    title={`平台备注`}
+                    centered
+                    onCancel={() => setMomVisible(false)}
+                    open={momVisible}
+                    destroyOnClose
+                    onOk={modifyRemark}
+                >
+                    <Input.TextArea
+                        autoSize={{ minRows: 4, maxRows: 8 }}
+                        placeholder="请输入备注"
+                        value={detailInfo.remark}
+                        onChange={(e) => {
+                            setDetailInfo({
+                                ...detailInfo,
+                                remark: e.target.value,
+                            });
+                        }}
+                    />
+                </Modal>
+            </Spin>
         </Modal>
     );
 };
