@@ -3,16 +3,78 @@ import React, { useEffect, useRef, useState } from 'react';
 import './index.less';
 import { Button, Form, Input, Space } from 'antd';
 import * as echarts from 'echarts';
-import { useDebounceFn } from 'ahooks';
-import { randomColor } from '@/utils/commonVal';
-import { uniqueId } from 'lodash';
+import { useDebounceFn, useFullscreen } from 'ahooks';
+import { randomColor, validatorHeartNo } from '@/utils/commonVal';
+import { ExpandOutlined, SelectOutlined } from '@ant-design/icons';
+import { userRelationMap } from '@/service/matchmaker';
+const avater = require('@/assets/avter.jpg');
+import { cloneDeep } from 'lodash';
+import UserSelect from '@/components/userSelect';
+
+const defaultOptions = {
+    lineStyle: {
+        opacity: 0.9,
+        width: 2,
+        curveness: 0.2,
+    },
+    series: [
+        {
+            type: 'graph',
+            name: 'users',
+            layout: 'force',
+            edgeSymbol: ['circle', 'arrow'],
+            roam: true,
+            animation: true,
+            edgeSymbolSize: [0, 10],
+            nodes: [],
+            edges: [],
+            label: {
+                show: true,
+            },
+            force: {
+                repulsion: 10000,
+            },
+        },
+    ],
+};
 
 const UserRelation = () => {
     const chartRef = useRef<echarts.EChartsType>();
-    const [detail, setDetail] = useState<any>({});
+    // 已经加载过的中间节点
     const hasLoadId = useRef<any>({});
+    // 当前所有扁平数据array
+    const flatDataMap = useRef<any>({});
+    // 上次渲染的options
+    const preOptions = useRef<any>(defaultOptions);
 
-    const loadUser = () => {};
+    const [fullScreen, { toggleFullscreen }] = useFullscreen(
+        () => document.getElementById('full-dom') as HTMLElement,
+    );
+
+    const defaultNodeInfo = () => ({
+        symbolSize: 100,
+        label: {
+            show: true,
+        },
+        itemStyle: {
+            color: randomColor(50),
+        },
+    });
+
+    const queryData = (values: any) => {
+        // 重置相关数据
+        preOptions.current = { ...cloneDeep(defaultOptions) };
+        flatDataMap.current = {};
+        hasLoadId.current = {};
+        chartRef.current?.clear();
+        drawGraph(values.userId);
+        chartRef.current?.on('click', { dataType: 'node' }, function (e: any) {
+            const id = e.data.name.split('-')[1];
+            if (!hasLoadId.current[id]) {
+                drawGraph(id);
+            }
+        });
+    };
 
     useEffect(() => {
         // 注册eCharts实例
@@ -21,129 +83,104 @@ const UserRelation = () => {
         );
     }, []);
 
-    const formatter = (params: any) => {
-        return `<div>
-        <div>姓名： -</div>
-        <div>心动号： 123132312321</div>
-        <div>申请时间： -</div>
-        <div>手机号：121231</div>
-      </div>`;
+    const transName = (detail: any) => {
+        return `${detail.name || detail.nickName}-${detail.id}`;
     };
 
-    useEffect(() => {
-        const option: any = {
-            tooltip: {
-                formatter: formatter,
-            },
-            lineStyle: {
-                opacity: 0.9,
-                width: 2,
-                curveness: 0.2,
-            },
-            series: [
-                {
-                    type: 'graph',
-                    name: 'users',
-                    layout: 'force',
-                    edgeSymbol: ['circle', 'arrow'],
-                    roam: true,
-                    animation: true,
-                    edgeSymbolSize: [0, 5],
-                    nodes: [
-                        {
-                            name: '夏双',
-                            value: 10,
-                            symbolSize: 150,
-                            itemStyle: {
-                                color: 'red',
-                                shadowBlur: 5.5,
-                                shadowColor: 'rgba(220, 84, 84, 1)',
-                            },
-                        },
-                        {
-                            name: '张强',
-                            value: 5,
-                            symbolSize: 100,
-                            itemStyle: {
-                                color: randomColor(128),
-                            },
-                        },
-                        {
-                            name: 'ui',
-                            value: 5,
-                            symbolSize: 100,
-                            itemStyle: {
-                                color: randomColor(128),
-                            },
-                        },
-                        {
-                            name: '徐徐盛开',
-                            value: 9,
-                            symbolSize: 100,
-                            itemStyle: {
-                                color: randomColor(128),
-                            },
-                        },
-                        {
-                            name: '其他',
-                            value: 7,
-                            symbolSize: 100,
-                            itemStyle: {
-                                color: randomColor(128),
-                            },
-                        },
-                    ],
-                    edges: [
-                        {
-                            source: '夏双',
-                            target: '张强',
-                        },
-                        {
-                            source: '夏双',
-                            target: 'ui',
-                        },
-                        {
-                            source: '夏双',
-                            target: '徐徐盛开',
-                        },
-                        {
-                            source: '徐徐盛开',
-                            target: '其他',
-                        },
-                    ],
-                    label: {
-                        show: true,
-                    },
-                    force: {
-                        repulsion: 5000,
-                    },
-                },
-            ],
-        };
-        chartRef.current?.setOption(option);
-        hasLoadId.current[detail.id] = true;
-        chartRef.current?.on('click', { dataType: 'node' }, function (e: any) {
-            if (!hasLoadId.current[e.data.value]) {
-                const value = uniqueId();
-                console.log(value);
-                option.series[0].nodes.push({
-                    name: `随机名称${value}`,
-                    value,
-                    symbolSize: 100,
+    const drawGraph = (userId: string) => {
+        if (hasLoadId.current[userId]) {
+            return;
+        }
+        userRelationMap({ userId }).then((res) => {
+            const { current, parent, children } = res;
+            const options = cloneDeep(preOptions.current);
+            const { nodes, edges } = options.series[0];
+            options.tooltip = {
+                formatter,
+            };
+            // 处理子节点信息
+            (children || []).forEach((item: any) => {
+                if (
+                    nodes.findIndex(
+                        (node: any) => node.name === transName(item),
+                    ) !== -1
+                ) {
+                    return;
+                }
+                const node = {
+                    ...defaultNodeInfo(),
+                    name: transName(item),
+                    // symbol: `image://${item.headImg || avater}`,
+                };
+                nodes.push(node);
+                edges.push({
+                    source: transName(item),
+                    target: transName(current),
+                });
+                flatDataMap.current[item.id] = item;
+            });
+            // 处理当前节点信息
+            if (
+                nodes.findIndex(
+                    (item: any) => item.name === transName(current),
+                ) === -1
+            ) {
+                nodes.push({
+                    ...defaultNodeInfo(),
                     itemStyle: {
-                        color: randomColor(128),
+                        color: 'red',
+                        shadowBlur: 5,
                     },
+                    symbolSize: 150,
+                    name: transName(current),
+                    // symbol: `image://${current.headImg || avater}`,
                 });
-                option.series[0].edges.push({
-                    source: e.data.name,
-                    target: `随机名称${value}`,
-                });
-                console.log('1232132', option.series[0]);
-                chartRef.current?.setOption(option);
+                flatDataMap.current[current.id] = current;
             }
+            // 处理父节点
+            if (
+                parent &&
+                nodes.findIndex(
+                    (item: any) => item.name === transName(parent),
+                ) === -1
+            ) {
+                nodes.push({
+                    ...defaultNodeInfo(),
+                    name: transName(parent),
+                    // symbol: `image://${parent.headImg || avater}`,
+                });
+                edges.push({
+                    source: transName(current),
+                    target: transName(parent),
+                });
+                flatDataMap.current[parent.id] = parent;
+            }
+            chartRef.current?.setOption(options);
+            preOptions.current = options;
+            hasLoadId.current[userId] = true;
         });
-    }, [detail]);
+    };
 
+    const formatter = (params: any) => {
+        const {
+            name,
+            nickName,
+            id,
+            mobilePhone,
+            createTime,
+            province,
+            city,
+            area,
+        } = flatDataMap.current[params.data.name?.split('-')[1]] || {};
+
+        return `<div>
+        <div>姓名： ${nickName || name}</div>
+        <div>心动号： ${id}</div>
+        <div>地址： ${province || '-'}${city || '-'}${area || '-'}</div>
+        <div>手机号： ${mobilePhone}</div>
+        <div>注册时间： ${createTime}</div>
+      </div>`;
+    };
     const _resizeChart = () => {
         if (chartRef.current) {
             chartRef.current.resize();
@@ -164,13 +201,16 @@ const UserRelation = () => {
     return (
         <CardLayout>
             <div className="user-relation-page">
-                <Form onFinish={loadUser} layout="inline">
+                <Form onFinish={queryData} layout="inline">
                     <Form.Item
-                        name={'id'}
+                        name={'userId'}
                         label="心动号"
-                        rules={[{ required: true }]}
+                        rules={[
+                            { required: true },
+                            { validator: validatorHeartNo },
+                        ]}
                     >
-                        <Input placeholder="请输入心动号" />
+                        <UserSelect />
                     </Form.Item>
                     <Form.Item>
                         <Space style={{ marginLeft: 80 }}>
@@ -181,8 +221,16 @@ const UserRelation = () => {
                         </Space>
                     </Form.Item>
                 </Form>
-
-                <div id="chart" className="chart-box"></div>
+                <div id="full-dom" className="full">
+                    <Button
+                        className="full-button"
+                        onClick={toggleFullscreen}
+                        icon={
+                            fullScreen ? <SelectOutlined /> : <ExpandOutlined />
+                        }
+                    ></Button>
+                    <div id="chart" className="chart-box"></div>
+                </div>
             </div>
         </CardLayout>
     );

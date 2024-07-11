@@ -90,3 +90,13 @@ export const modifyUserDetail = async (params: any) => {
     });
     return res.data;
 };
+
+export const userRelationMap = async (params: any) => {
+    const res = await request({
+        method: 'get',
+        url: `/api/bk/user/map`,
+        params,
+        showFailedMessage: false,
+    });
+    return res.data;
+};
