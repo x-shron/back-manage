@@ -24,7 +24,7 @@ export default defineConfig({
         },
         {
             path: '/',
-            // component: '@/layouts/index',
+            component: '@/layouts/index',
             routes: routes,
         },
     ],
