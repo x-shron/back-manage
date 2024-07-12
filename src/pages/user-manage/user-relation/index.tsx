@@ -12,11 +12,6 @@ import { cloneDeep } from 'lodash';
 import UserSelect from '@/components/userSelect';
 
 const defaultOptions = {
-    lineStyle: {
-        opacity: 0.9,
-        width: 2,
-        curveness: 0.2,
-    },
     series: [
         {
             type: 'graph',
@@ -31,8 +26,19 @@ const defaultOptions = {
             label: {
                 show: true,
             },
+            emphasis: {
+                focus: 'adjacency',
+                lineStyle: {
+                    width: 10,
+                },
+            },
             force: {
                 repulsion: 10000,
+            },
+            lineStyle: {
+                color: 'red',
+                width: 4,
+                curveness: 0.2,
             },
         },
     ],
@@ -68,12 +74,6 @@ const UserRelation = () => {
         hasLoadId.current = {};
         chartRef.current?.clear();
         drawGraph(values.userId);
-        chartRef.current?.on('click', { dataType: 'node' }, function (e: any) {
-            const id = e.data.name.split('-')[1];
-            if (!hasLoadId.current[id]) {
-                drawGraph(id);
-            }
-        });
     };
 
     useEffect(() => {
@@ -130,13 +130,18 @@ const UserRelation = () => {
                     itemStyle: {
                         color: 'red',
                         shadowBlur: 5,
+                        shadowColor: 'red',
                     },
                     symbolSize: 150,
                     name: transName(current),
                     // symbol: `image://${current.headImg || avater}`,
                 });
-                flatDataMap.current[current.id] = current;
             }
+            flatDataMap.current[current.id] = {
+                ...current,
+                childrenNum: children?.length || 0,
+            };
+
             // 处理父节点
             if (
                 parent &&
@@ -158,10 +163,24 @@ const UserRelation = () => {
             chartRef.current?.setOption(options);
             preOptions.current = options;
             hasLoadId.current[userId] = true;
+            chartRef.current?.on(
+                'click',
+                { dataType: 'node' },
+                function (e: any) {
+                    const id = e.data.name.split('-')[1];
+                    if (!hasLoadId.current[id]) {
+                        drawGraph(id);
+                    }
+                },
+            );
         });
     };
 
     const formatter = (params: any) => {
+        const nodeId = params.data.name?.split('-')[1];
+        if (!nodeId) {
+            return null;
+        }
         const {
             name,
             nickName,
@@ -171,11 +190,13 @@ const UserRelation = () => {
             province,
             city,
             area,
-        } = flatDataMap.current[params.data.name?.split('-')[1]] || {};
+            childrenNum,
+        } = flatDataMap.current[nodeId] || {};
 
         return `<div>
         <div>姓名： ${nickName || name}</div>
         <div>心动号： ${id}</div>
+        <div>直接邀约人数： ${childrenNum ?? '-'}</div>
         <div>地址： ${province || '-'}${city || '-'}${area || '-'}</div>
         <div>手机号： ${mobilePhone}</div>
         <div>注册时间： ${createTime}</div>

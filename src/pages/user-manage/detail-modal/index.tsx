@@ -94,7 +94,7 @@ const DetailModal: React.FC<any> = (props) => {
         },
         {
             label: '年收入',
-            children: detailInfo?.yearSalary || '--',
+            children: detailInfo?.yearSalaryName || '--',
         },
         {
             label: '住房',
@@ -107,6 +107,10 @@ const DetailModal: React.FC<any> = (props) => {
         {
             label: '星座',
             children: detailInfo?.starSignName || '--',
+        },
+        {
+            label: '交友类别',
+            children: detailInfo?.friendTypeName || '--',
         },
         {
             label: '平台备注' || '--',
@@ -166,7 +170,7 @@ const DetailModal: React.FC<any> = (props) => {
             label: '理想生活',
             children: (
                 <>
-                    {detailInfo?.idealLifeList?.map((item: any) => {
+                    {detailInfo?.idealLifeListName?.map((item: any) => {
                         return <Tag color={randomColor(128)}>{item}</Tag>;
                     })}
                 </>
@@ -177,7 +181,7 @@ const DetailModal: React.FC<any> = (props) => {
             label: '我的梦想',
             children: (
                 <>
-                    {detailInfo?.dreamList?.map((item: any) => {
+                    {detailInfo?.dreamListName?.map((item: any) => {
                         return <Tag color={randomColor()}>{item}</Tag>;
                     })}
                 </>
