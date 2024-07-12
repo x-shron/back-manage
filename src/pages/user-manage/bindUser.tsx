@@ -13,12 +13,12 @@ interface Props {
 
 const BindUser: React.FC<Props> = ({ visible, onCancel, onOk }) => {
     const [form] = Form.useForm();
-
     const handle = () => {
         form.validateFields().then((values: any) => {
             onOk?.(values);
         });
     };
+
     return (
         <Modal
             title="绑定用户"

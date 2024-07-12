@@ -2,28 +2,20 @@ import { ClockCircleOutlined } from '@ant-design/icons';
 import { Timeline } from 'antd';
 import React from 'react';
 
-const TimeInfo = () => {
+const TimeInfo = ({ trendList }: any) => {
     return (
         <Timeline
             mode="left"
-            items={[
-                {
-                    children: '发表说说 2015-09-01',
-                },
-                {
-                    children: 'Solve initial network problems 2015-09-01',
-                },
-                {
-                    children: 'Technical testing 2015-09-01',
-                },
-                {
-                    children: '注册为用户2015-09-03',
-                    dot: (
-                        <ClockCircleOutlined className="timeline-clock-icon" />
-                    ),
-                    color: 'green',
-                },
-            ]}
+            items={trendList.map((item: any, index: number) => {
+                return {
+                    children: `${item.content} (${item.createTime})`,
+                    dot:
+                        index === trendList.length - 1 ? (
+                            <ClockCircleOutlined className="timeline-clock-icon" />
+                        ) : undefined,
+                    color: index === trendList.length - 1 ? 'green' : undefined,
+                };
+            })}
         />
     );
 };

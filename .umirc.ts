@@ -28,7 +28,13 @@ export default defineConfig({
             routes: routes,
         },
     ],
-    devServer: { port: 8007 },
+    devServer: {
+        port: 8007,
+        devServer: {
+            liveReload: true,
+        },
+        hot: false,
+    },
     proxy: {
         '/api': {
             target: SERVER_URL,

@@ -38,6 +38,8 @@ const DetailModal: React.FC<any> = (props) => {
                     setDetailInfo({
                         ...info,
                         ...res.userBaseInfo,
+                        ...res.userExtraInfo,
+                        trendList: res.trendList || [],
                     });
                 })
                 .finally(() => {
@@ -129,7 +131,7 @@ const DetailModal: React.FC<any> = (props) => {
         {
             key: '0',
             label: 'TA的动态',
-            children: <TimeInfo />,
+            children: <TimeInfo trendList={detailInfo.trendList || []} />,
         },
         {
             key: '1',
