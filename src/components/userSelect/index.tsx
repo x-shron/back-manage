@@ -1,17 +1,17 @@
 import { getUserList } from '@/service/matchmaker';
 import { validatorHeartNo } from '@/utils/commonVal';
 import { useDebounceFn } from 'ahooks';
-import { Form, message, Select, Spin } from 'antd';
+import { Empty, Form, message, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 
-const UserSelect = ({ onChange, value }: any) => {
+const UserSelect = ({ onChange, value, role, ...restProps }: any) => {
     const [userList, setUserList] = useState([]);
     const [fetching, setFetching] = useState(false);
 
     const handle = (id?: any) => {
         setFetching(true);
         setUserList([]);
-        getUserList({ id, pageSize: 50, pageNo: 1 })
+        getUserList({ id, pageSize: 50, pageNo: 1, role })
             .then((res) => {
                 const list = (res.records || []).map((item: any) => {
                     return {
@@ -59,11 +59,14 @@ const UserSelect = ({ onChange, value }: any) => {
                     <Spin size="small">
                         <div style={{ height: 100 }}></div>
                     </Spin>
-                ) : null
+                ) : (
+                    <Empty />
+                )
             }
             value={value}
             filterOption={false}
             onChange={onChange}
+            {...restProps}
         />
     );
 };

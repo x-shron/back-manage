@@ -34,7 +34,6 @@ const DetailModal: React.FC<any> = (props) => {
                 userId: info.id,
             })
                 .then((res) => {
-                    console.log(res, 'first');
                     setDetailInfo({
                         ...info,
                         ...res.userBaseInfo,
@@ -54,7 +53,7 @@ const DetailModal: React.FC<any> = (props) => {
         onClose?.();
     };
 
-    const items: DescriptionsItemType[] = [
+    const baseInfoItems: DescriptionsItemType[] = [
         {
             label: '姓名',
             children: detailInfo?.name || detailInfo?.nickName || '--',
@@ -127,7 +126,7 @@ const DetailModal: React.FC<any> = (props) => {
         },
     ];
 
-    const tabsItems: TabsProps['items'] = [
+    const aboutHeItems: TabsProps['items'] = [
         {
             key: '0',
             label: 'TA的动态',
@@ -136,7 +135,7 @@ const DetailModal: React.FC<any> = (props) => {
         {
             key: '1',
             label: '自我评价',
-            children: detailInfo.userIntroduce || '--',
+            children: detailInfo.introduce || '--',
         },
         {
             key: '2',
@@ -146,12 +145,12 @@ const DetailModal: React.FC<any> = (props) => {
         {
             key: '3',
             label: '爱情观念',
-            children: 'Content of Tab Pane 3',
+            children: detailInfo.loveConcept || '--',
         },
         {
             key: '4',
             label: '理想的另一半',
-            children: detailInfo.requireInfos,
+            children: detailInfo.idealLover || '--',
         },
     ];
 
@@ -218,7 +217,7 @@ const DetailModal: React.FC<any> = (props) => {
                         detailInfo.createTime || '--'
                     })`}</span>
                 </div>
-                <Descriptions className="detail-item" items={items} />
+                <Descriptions className="detail-item" items={baseInfoItems} />
                 <div className="detail-modal-title">个性标签</div>
                 <div className="detail-item">
                     <Tabs
@@ -232,20 +231,11 @@ const DetailModal: React.FC<any> = (props) => {
                     <Tabs
                         destroyInactiveTabPane
                         defaultActiveKey="0"
-                        items={tabsItems}
+                        items={aboutHeItems}
                     />
                 </div>
                 <div className="detail-modal-title">留言板</div>
-                <div className="detail-item">
-                    <div>
-                        <span className="detail-label">xxxxx留言: </span>
-                        <span>你好啊</span>
-                    </div>
-                    <div>
-                        <span className="detail-label">xxxxx留言: </span>
-                        <span>来了啊</span>
-                    </div>
-                </div>
+                <div className="detail-item">{detailInfo.message || '--'}</div>
                 <Modal
                     width={'30%'}
                     title={`平台备注`}

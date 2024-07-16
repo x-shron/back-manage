@@ -14,6 +14,7 @@ import {
     Modal,
     message,
     Avatar,
+    Button,
 } from 'antd';
 import { GENDER_OPTIONS, MARRIAGE_STATUS_OPTIONS } from '@/constant';
 import {
@@ -40,6 +41,7 @@ import {
     PoweroffOutlined,
 } from '@ant-design/icons';
 import BindUser from './bindUser';
+import { useLocation, useHistory } from 'umi';
 
 const avater = require('@/assets/avter.jpg');
 
@@ -96,6 +98,26 @@ export default () => {
         });
         setCurrentUser(undefined);
     };
+    const destroy = () => {
+        Modal.destroyAll();
+    };
+    const lookAvater = (info: any) => {
+        Modal.info({
+            content: (
+                <img style={{ width: '100%' }} src={info.headImg || avater} />
+            ),
+            centered: true,
+            icon: null,
+            footer: (
+                <Space style={{ float: 'right' }} size="large">
+                    <Button onClick={destroy}>非法</Button>
+                    <Button onClick={destroy} type="primary">
+                        合法
+                    </Button>
+                </Space>
+            ),
+        });
+    };
 
     const columns: ColumnsType<any> = [
         {
@@ -124,7 +146,13 @@ export default () => {
             ellipsis: true,
             dataIndex: 'headImg',
             render: (text, record) => {
-                return <Avatar src={record.headImg || avater} />;
+                return (
+                    <Avatar
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => lookAvater(record)}
+                        src={record.headImg || avater}
+                    />
+                );
             },
         },
         {
@@ -285,9 +313,7 @@ export default () => {
         getJobMap().then((res) => {
             setJobMap(transFromToOptions(res));
         });
-        getSchoolMap().then((res) => {
-            console.log('school', res);
-        });
+        getSchoolMap().then((res) => {});
         getTagMap().then((res) => {
             setTagMap(transFromToOptions(res));
         });
@@ -305,6 +331,15 @@ export default () => {
         };
         return getUserList(newParams);
     };
+
+    const { query } = useLocation();
+
+    useEffect(() => {
+        const form = tableRef.current?.getFormInstance();
+        form?.setFieldsValue(query);
+        tableRef.current?.reload(query);
+    }, [query.id]);
+
     return (
         <StarryCard>
             <div className="sub-tenant-manage-container">
@@ -313,6 +348,7 @@ export default () => {
                     getDataSource={getDataSource}
                     queryFormFeild={queryFormFeild}
                     ref={tableRef}
+                    fetchDataAfterMount={false}
                     rightTool={[
                         <a title="下载">
                             <DownloadOutlined />

@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { history, useHistory } from 'umi';
 import { Button, Form, Input, message, Select } from 'antd';
 import Icon, { KeyOutlined, UserOutlined } from '@ant-design/icons';
-import qs from 'querystring';
 // @ts-ignore
 import { ReactComponent as TopLeft } from '@/assets/icons/ic_bugle_01.svg';
 import { ReactComponent as TopRight } from '@/assets/icons/ic_bugle_02.svg';

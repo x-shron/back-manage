@@ -8,7 +8,7 @@ export const marriage_process_type = [
         value: '0',
     },
     {
-        label: '资料审核',
+        label: '审核通过',
         value: '1',
     },
     {
@@ -30,9 +30,5 @@ export const marriage_process_type = [
     {
         label: '见面后满意',
         value: '6',
-    },
-    {
-        label: '审核通过',
-        value: '7',
     },
 ];

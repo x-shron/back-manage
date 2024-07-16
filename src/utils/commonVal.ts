@@ -25,7 +25,6 @@ export function randomColor(offset = 0) {
     let g = Math.floor(Math.random() * (256 - offset) + offset);
     let b = Math.floor(Math.random() * (256 - offset) + offset);
     let rgb = 'rgb(' + r + ',' + g + ',' + b + ')';
-    console.log('firstd  color', rgb);
     return rgb;
 }
 

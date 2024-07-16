@@ -10,6 +10,7 @@ import {
     Affix,
     Button,
     Form,
+    FormInstance,
     Pagination,
     PaginationProps,
     Space,
@@ -32,11 +33,11 @@ interface Props extends TableProps {
 
 export interface RefStarryTable {
     // 重新从首页
-    reload: () => void;
+    reload: (params?: any) => void;
     // 刷新当前页
     refresh: () => void;
+    getFormInstance: () => FormInstance;
 }
-
 const StarryTable: React.FC<Props> = (props, ref) => {
     const {
         columns,
@@ -51,6 +52,7 @@ const StarryTable: React.FC<Props> = (props, ref) => {
     const [loading, setLoading] = useState(false);
     const [currentData, setCurrentData] = useState([]);
     const [totalNum, setTotalNum] = useState(0);
+    const [form] = Form.useForm();
 
     const [queryParams, setPueryParams] = useState({
         pageNo: 1,
@@ -58,14 +60,16 @@ const StarryTable: React.FC<Props> = (props, ref) => {
     });
 
     useImperativeHandle(ref, () => ({
-        reload: () => {
+        reload: (params: any) => {
             setPueryParams({
+                ...params,
                 ...queryParams,
                 pageNo: 1,
                 pageSize: 10,
             });
         },
         refresh: () => setPueryParams({ ...queryParams }),
+        getFormInstance: () => form,
     }));
 
     const onPageChange: PaginationProps['onChange'] = (current, pageSize) => {
@@ -112,6 +116,7 @@ const StarryTable: React.FC<Props> = (props, ref) => {
             <QueryFrom
                 onChange={queryFormChange}
                 qeryForm={queryFormFeild}
+                form={form}
             ></QueryFrom>
             <div className="tool-bar-container">
                 <div> {leftTool}</div>

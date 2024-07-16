@@ -51,6 +51,26 @@ export const unbindUser = async (params: any) => {
     return res.data;
 };
 
+export const bindMatchMaker = async (params: any) => {
+    const res = await request({
+        method: 'post',
+        url: `/api/bk/matchmaker/bind`,
+        data: params,
+        showFailedMessage: false,
+    });
+    return res.data;
+};
+
+export const marriageStatusChange = async (params: any) => {
+    const res = await request({
+        method: 'get',
+        url: `/api/bk/matchmaker/trans/status`,
+        params,
+        showFailedMessage: false,
+    });
+    return res.data;
+};
+
 export const bindUser = async (params: any) => {
     const res = await request({
         method: 'get',
@@ -60,7 +80,6 @@ export const bindUser = async (params: any) => {
     });
     return res.data;
 };
-
 export const getOrderList = async (params: any) => {
     const res = await request({
         method: 'post',

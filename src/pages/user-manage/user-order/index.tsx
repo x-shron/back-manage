@@ -1,14 +1,25 @@
 import CardLayout from '@/components/CardLayout';
-import { Input, message, Space, Tabs, Tooltip } from 'antd';
+import {
+    Button,
+    Form,
+    Input,
+    message,
+    Modal,
+    Space,
+    Tabs,
+    Tooltip,
+} from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import StarryTable, { RefStarryTable } from '@/components/StarryTable';
-import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons';
 import { getOrderList } from '@/service/matchmaker';
 import { ColumnsType } from 'antd/es/table';
 
 import './index.less';
 import { useDebounceEffect, useUpdateEffect } from 'ahooks';
 import { validatorHeartNo } from '@/utils/commonVal';
+import UserSelect from '@/components/userSelect';
+import { useHistory } from 'umi';
+import { ContainerOutlined } from '@ant-design/icons';
 
 const bizTypeMap = [
     {
@@ -30,20 +41,20 @@ const UserOrder = () => {
     const tabREf = useRef<RefStarryTable>(null);
 
     const [userId, setUserId] = useState<any>(undefined);
+    const history = useHistory();
 
     useUpdateEffect(() => {
         tabREf.current?.reload();
     }, [activeKey]);
 
+    const goDetail = (id: string) => {
+        history.push(`/user-list?id=${id}`);
+    };
+
     const columns: ColumnsType<any> = [
         {
-            title: '订单号',
+            title: '订单编号',
             dataIndex: 'id',
-            fixed: 'left',
-        },
-        {
-            title: '心动号',
-            dataIndex: 'userId',
             fixed: 'left',
         },
         {
@@ -53,6 +64,29 @@ const UserOrder = () => {
             render: (text) => {
                 return orderStatusMap.find((item) => item.key == text)?.label;
             },
+        },
+        {
+            title: '用户ID',
+            dataIndex: 'userId',
+            fixed: 'left',
+            render: (id) => {
+                return <a onClick={() => goDetail(id)}>{id}</a>;
+            },
+        },
+        {
+            title: '手机号',
+            dataIndex: 'mobilePhone',
+            fixed: 'left',
+        },
+        {
+            title: '来源',
+            dataIndex: 'source',
+            fixed: 'left',
+        },
+        {
+            title: '用户意向',
+            dataIndex: 'intention',
+            fixed: 'left',
         },
         {
             title: '项目名称',
@@ -78,6 +112,27 @@ const UserOrder = () => {
         {
             title: '支付时间',
             dataIndex: 'payTime',
+        },
+        {
+            title: '支付方式',
+            dataIndex: 'payChannel',
+        },
+        {
+            title: '操作',
+            dataIndex: 'id',
+            fixed: 'right',
+            width: 100,
+            render: () => {
+                return (
+                    <Space>
+                        <Tooltip title="详情">
+                            <a>
+                                <ContainerOutlined />
+                            </a>
+                        </Tooltip>
+                    </Space>
+                );
+            },
         },
     ];
 
@@ -161,6 +216,11 @@ const UserOrder = () => {
                     ]}
                 />
             </div>
+            {/* <Modal 
+                title={'订单详情'}
+            >
+
+            </Modal> */}
         </CardLayout>
     );
 };

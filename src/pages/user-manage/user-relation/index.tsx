@@ -27,7 +27,6 @@ const defaultOptions = {
                 show: true,
             },
             emphasis: {
-                focus: 'adjacency',
                 lineStyle: {
                     width: 10,
                 },

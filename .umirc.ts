@@ -30,10 +30,6 @@ export default defineConfig({
     ],
     devServer: {
         port: 8007,
-        devServer: {
-            liveReload: true,
-        },
-        hot: false,
     },
     proxy: {
         '/api': {

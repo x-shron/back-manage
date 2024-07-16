@@ -1,13 +1,4 @@
-import {
-    Button,
-    Col,
-    Form,
-    FormInstance,
-    Input,
-    Row,
-    Select,
-    Space,
-} from 'antd';
+import { Button, Col, Form, FormInstance, Row } from 'antd';
 import React, { ReactNode } from 'react';
 export type QueryFormProps = {
     feild: any;
@@ -21,12 +12,11 @@ export type QueryFormProps = {
 export interface Props {
     qeryForm?: QueryFormProps;
     onChange?: (value: any) => void;
+    form: FormInstance;
 }
 
 export const QueryFrom: React.FC<Props> = (props) => {
-    const { qeryForm, onChange } = props;
-
-    const [form] = Form.useForm();
+    const { qeryForm, onChange, form } = props;
 
     if (!qeryForm?.length) {
         return null;
