@@ -166,11 +166,11 @@ const UserRelation = () => {
             chartRef.current?.setOption(options);
             preOptions.current = options;
             hasLoadId.current[userId] = true;
-            chartRef.current?.on('click', { dataType: 'node' }, run);
+            chartRef.current?.on('click', { dataType: 'node' }, loadNode);
         });
     };
 
-    const { run } = useDebounceFn(
+    const { run: loadNode } = useDebounceFn(
         (e: any) => {
             const id = e.data.name.split('-')[1];
             if (!hasLoadId.current[id]) {

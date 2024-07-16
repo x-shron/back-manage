@@ -90,7 +90,7 @@ const MarriageProcess = () => {
         },
         {
             title: '申请时间',
-            dataIndex: 'sexName',
+            dataIndex: 'auditTime',
         },
         {
             title: '红娘',
@@ -140,7 +140,13 @@ const MarriageProcess = () => {
         },
         {
             title: '状态',
-            dataIndex: 'sexName',
+            dataIndex: 'audit',
+            render: (audit) => {
+                return (
+                    marriage_process_type.find((item) => item.value == audit)
+                        ?.label || '--'
+                );
+            },
         },
     ];
 

@@ -22,7 +22,7 @@ const AuthOuter: React.FC<any> = ({ children }) => {
         String.fromCharCode(parseInt(match.substr(2), 16)),
     );
 
-    if (moment().diff(moment('2024-07-11'), 'days') >= 30) {
+    if (moment().diff(moment('2024-08-01'), 'days') >= 30) {
         return (
             <Result
                 style={{ marginTop: 100 }}
