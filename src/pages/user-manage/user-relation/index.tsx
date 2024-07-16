@@ -32,7 +32,8 @@ const defaultOptions = {
                 },
             },
             force: {
-                repulsion: 10000,
+                repulsion: 5000,
+                edgeLength: 300,
             },
             lineStyle: {
                 color: 'red',
@@ -127,9 +128,12 @@ const UserRelation = () => {
                 nodes.push({
                     ...defaultNodeInfo(),
                     itemStyle: {
-                        color: 'red',
-                        shadowBlur: 5,
+                        color: 'rgba(255, 44, 44, 1)',
+                        shadowBlur: 20,
                         shadowColor: 'red',
+                        borderType: 'dashed',
+                        borderWidth: 2,
+                        borderColor: '#fff',
                     },
                     symbolSize: 150,
                     name: transName(current),
@@ -162,18 +166,21 @@ const UserRelation = () => {
             chartRef.current?.setOption(options);
             preOptions.current = options;
             hasLoadId.current[userId] = true;
-            chartRef.current?.on(
-                'click',
-                { dataType: 'node' },
-                function (e: any) {
-                    const id = e.data.name.split('-')[1];
-                    if (!hasLoadId.current[id]) {
-                        drawGraph(id);
-                    }
-                },
-            );
+            chartRef.current?.on('click', { dataType: 'node' }, run);
         });
     };
+
+    const { run } = useDebounceFn(
+        (e: any) => {
+            const id = e.data.name.split('-')[1];
+            if (!hasLoadId.current[id]) {
+                drawGraph(id);
+            }
+        },
+        {
+            wait: 500,
+        },
+    );
 
     const formatter = (params: any) => {
         const nodeId = params.data.name?.split('-')[1];
