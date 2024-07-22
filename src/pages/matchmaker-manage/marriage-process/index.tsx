@@ -31,6 +31,7 @@ import {
 import { ColumnsType } from 'antd/es/table';
 import { useHistory } from 'umi';
 import UserSelect from '@/components/userSelect';
+import AllImage from './AllImage';
 
 const MarriageProcess = () => {
     const [activeKey, setActiveKey] = useState<string | undefined>(undefined);
@@ -222,49 +223,57 @@ const MarriageProcess = () => {
                     setCurrentItem(undefined);
                     setHandleVisible(false);
                 }}
+                width={'60%'}
+                className="track-modal"
             >
-                <Form
-                    onFinish={handleStatus}
-                    labelCol={{ span: 4 }}
-                    preserve={false}
-                    form={matchMarkerForm}
-                >
-                    <Form.Item
-                        name="status"
-                        label="线下状态"
-                        rules={[
-                            { required: true, message: '请选择跟进线下状态' },
-                        ]}
+                <AllImage detail={currentItem} />
+                <div>
+                    <Form
+                        onFinish={handleStatus}
+                        labelCol={{ span: 4 }}
+                        preserve={false}
+                        form={matchMarkerForm}
                     >
-                        <Select
-                            placeholder="请选择跟进线下状态"
-                            options={marriage_process_type.filter(
-                                (item: any, i: number) => i,
-                            )}
-                        />
-                    </Form.Item>
-                    <Form.Item name="mark" label="备注">
-                        <Input.TextArea placeholder="请输入跟进记录" />
-                    </Form.Item>
-                    <Form.Item>
-                        <Space style={{ float: 'right' }} size="large">
-                            <Button
-                                onClick={() => {
-                                    setHandleVisible(false);
-                                    setCurrentItem(undefined);
-                                }}
-                            >
-                                取消
-                            </Button>
-                            <Button htmlType="submit" type="primary">
-                                确定
-                            </Button>
-                        </Space>
-                    </Form.Item>
-                </Form>
-                <Divider />
-                <div>全部跟进记录</div>
-                <Empty />
+                        <Form.Item
+                            name="status"
+                            label="线下状态"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: '请选择跟进线下状态',
+                                },
+                            ]}
+                        >
+                            <Select
+                                placeholder="请选择跟进线下状态"
+                                options={marriage_process_type.filter(
+                                    (item: any, i: number) => i,
+                                )}
+                            />
+                        </Form.Item>
+                        <Form.Item name="mark" label="备注">
+                            <Input.TextArea placeholder="请输入跟进记录" />
+                        </Form.Item>
+                        <Form.Item>
+                            <Space style={{ float: 'right' }} size="large">
+                                <Button
+                                    onClick={() => {
+                                        setHandleVisible(false);
+                                        setCurrentItem(undefined);
+                                    }}
+                                >
+                                    取消
+                                </Button>
+                                <Button htmlType="submit" type="primary">
+                                    确定
+                                </Button>
+                            </Space>
+                        </Form.Item>
+                    </Form>
+                    <Divider />
+                    <div>全部跟进记录</div>
+                    <Empty />
+                </div>
             </Modal>
             <Modal
                 title="指派红娘"
@@ -283,7 +292,7 @@ const MarriageProcess = () => {
                         name="matchmakerUserId"
                         rules={[{ required: true, message: '请选择红娘' }]}
                     >
-                        {/* 6是红娘 */}
+                        {/* 6 是红娘 */}
                         <UserSelect role="6" placeholder="请选择红娘" />
                     </Form.Item>
                 </Form>

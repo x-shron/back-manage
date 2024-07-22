@@ -7,6 +7,7 @@ import Error404 from './Error404';
 import { withRouter } from 'umi';
 import AuthOuter from './AuthOuter';
 import zhCN from 'antd/locale/zh_CN';
+import 'dayjs/locale/zh-cn';
 import Header from './header';
 import MenuCustom from './Menu';
 import BreadcrumbCustom from './Breadcrumb';

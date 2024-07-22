@@ -15,6 +15,7 @@ import {
     message,
     Avatar,
     Button,
+    Badge,
 } from 'antd';
 import { GENDER_OPTIONS, MARRIAGE_STATUS_OPTIONS } from '@/constant';
 import {
@@ -99,6 +100,7 @@ export default () => {
         setCurrentUser(undefined);
     };
     const destroy = () => {
+        message.error('后端暂不支持');
         Modal.destroyAll();
     };
     const lookAvater = (info: any) => {
@@ -147,11 +149,14 @@ export default () => {
             dataIndex: 'headImg',
             render: (text, record) => {
                 return (
-                    <Avatar
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => lookAvater(record)}
-                        src={record.headImg || avater}
-                    />
+                    <Space>
+                        <Avatar
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => lookAvater(record)}
+                            src={record.headImg || avater}
+                        />
+                        <Badge status="warning" text="待审核" />
+                    </Space>
                 );
             },
         },

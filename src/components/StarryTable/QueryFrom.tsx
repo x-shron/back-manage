@@ -4,7 +4,7 @@ export type QueryFormProps = {
     feild: any;
     name: ReactNode;
     label: ReactNode;
-    colSpan?: number;
+    colSpan?: number; // 默认4
     initialValue?: any;
     rules?: any;
     FeildProps: any; // 数据录入属性

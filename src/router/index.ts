@@ -70,6 +70,18 @@ const routes = [
         exact: true,
         title: '用户邀约关系',
     },
+    {
+        path: '/distribution-person',
+        component: '@/pages/distribution/person',
+        exact: true,
+        title: '分销人员管理',
+    },
+    {
+        path: '/distribution-rule',
+        component: '@/pages/distribution/rule',
+        exact: true,
+        title: '分销规则',
+    },
 ];
 
 export default routes;

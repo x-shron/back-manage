@@ -55,6 +55,22 @@ const menuList = [
         ],
     },
     {
+        title: '分销管理',
+        icon: <PieChartOutlined />,
+        children: [
+            {
+                title: '分销人员',
+                path: '/distribution-person',
+                children: [],
+            },
+            {
+                title: '分销规则',
+                path: '/distribution-rule',
+                children: [],
+            },
+        ],
+    },
+    {
         title: '系统管理',
         icon: <TrademarkOutlined />,
         children: [

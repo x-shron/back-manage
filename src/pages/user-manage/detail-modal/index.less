@@ -1,11 +1,62 @@
 .user-detail-modal {
+    color: #2e2e2e;
     .ant-modal-body {
         padding: 8px;
         max-height: 80vh;
         overflow-y: auto;
     }
+    .detail-dynamic {
+        position: relative;
+        &.audit-fail {
+            color: #b8b8b8;
+        }
+        .audit-tag {
+            position: absolute;
+            top: 10px;
+            left: -100px;
+            span {
+                font-size: 80px;
+            }
+        }
+    }
+    .audit-item-green {
+        font-size: 20px;
+        color: #52c41a;
+        cursor: pointer;
+    }
+    .audit-item-yellow {
+        color: #faad14;
+        cursor: pointer;
+        font-size: 20px;
+    }
+    .audit-item-red {
+        color: rgb(255, 96, 59);
+        cursor: pointer;
+        font-size: 20px;
+    }
     .detail-item {
         padding: 12px;
+        .image-item {
+            margin: 4px;
+            display: inline-block;
+            width: 150px;
+            height: 180px;
+            overflow: hidden;
+            background: #dddddd;
+            position: relative;
+            border-radius: 3px;
+            .ant-image {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border-radius: 3px;
+            }
+        }
+        .operate-audit {
+            margin: 0 20px;
+            font-size: 20px;
+        }
     }
     .detail-modal-title {
         border-bottom: 1px solid #eee;
