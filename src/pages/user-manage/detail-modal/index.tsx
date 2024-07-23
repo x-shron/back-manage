@@ -71,6 +71,10 @@ const DetailModal: React.FC<any> = (props) => {
             children: detailInfo?.animalSignName || '--',
         },
         {
+            label: '所在地',
+            children: detailInfo?.houseStatusNa || '--',
+        },
+        {
             label: '家乡',
             children:
                 (detailInfo?.homeProvince || '-') +
@@ -99,7 +103,7 @@ const DetailModal: React.FC<any> = (props) => {
         },
         {
             label: '住房',
-            children: detailInfo?.houseStatusName || '--',
+            children: detailInfo?.houseStatusNam || '--',
         },
         {
             label: '汽车',
@@ -135,22 +139,34 @@ const DetailModal: React.FC<any> = (props) => {
         {
             key: '1',
             label: '自我评价',
-            children: detailInfo.introduce || '--',
+            children: (
+                <pre className="pre-style">{detailInfo.introduce || '--'}</pre>
+            ),
         },
         {
             key: '2',
             label: '家庭背景',
-            children: detailInfo.homeBackground || '--',
+            children: (
+                <pre className="pre-style">
+                    {detailInfo.homeBackground || '--'}
+                </pre>
+            ),
         },
         {
             key: '3',
             label: '爱情观念',
-            children: detailInfo.loveConcept || '--',
+            children: (
+                <pre className="pre-style">
+                    {detailInfo.loveConcept || '--'}
+                </pre>
+            ),
         },
         {
             key: '4',
             label: '理想的另一半',
-            children: detailInfo.idealLover || '--',
+            children: (
+                <pre className="pre-style">{detailInfo.idealLover || '--'}</pre>
+            ),
         },
     ];
 
