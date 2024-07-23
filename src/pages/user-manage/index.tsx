@@ -178,7 +178,7 @@ export default () => {
         {
             title: '所在地',
             ellipsis: true,
-            dataIndex: 'houseStatusName',
+            dataIndex: 'houseStatusN',
         },
         {
             title: '职业',
