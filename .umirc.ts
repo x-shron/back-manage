@@ -39,12 +39,14 @@ export default defineConfig({
         },
     },
     chainWebpack(memo, args) {
-        memo.output.path(
-            path.resolve(
-                __dirname,
-                '../',
-                './xindOnline/src/main/resources/static',
-            ),
-        );
+        memo.output
+            .path(
+                path.resolve(
+                    __dirname,
+                    '../',
+                    './xindOnline/src/main/resources/static',
+                ),
+            )
+            .chunkFilename('[contenthash].js');
     },
 });

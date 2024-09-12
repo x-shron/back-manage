@@ -2,6 +2,7 @@ import { message, Result } from 'antd';
 import moment from 'moment';
 import React, { useLayoutEffect } from 'react';
 import { useHistory } from 'umi';
+import { startTime } from '../../../constant';
 
 // 可用作项目的前置权限控制
 const AuthOuter: React.FC<any> = ({ children }) => {
@@ -22,7 +23,7 @@ const AuthOuter: React.FC<any> = ({ children }) => {
         String.fromCharCode(parseInt(match.substr(2), 16)),
     );
 
-    if (moment().diff(moment('2024-08-01'), 'days') >= 30) {
+    if (moment().diff(moment(startTime), 'days') > 30) {
         return (
             <Result
                 style={{ marginTop: 100 }}
